@@ -27,29 +27,28 @@ namespace FileClient
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         TcpListener hostListener = null;
         IPEndPoint peerEndPoint;
+        string folderPath, file;
 
-        private string folderPath
+        private void setFolderPath(string value)
         {
-            get { return folderPath; }
-            set { folderPath = value; }
+            folderPath = value;
         }
 
-        private string file
+        private void setFile(string value)
         {
-            get { return file; }
-            set { file = value; }
+            file = value;
         }
 
         private void Btn_RequestFile_Click(object sender, EventArgs e)
         {
-            file = LstView_Files.SelectedItems.ToString();
+            setFile(LstView_Files.SelectedItems.ToString());
         }
 
         private void Btn_FolderLocation_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowse = new FolderBrowserDialog();
             folderBrowse.ShowDialog();
-            folderPath = folderBrowse.SelectedPath;
+            setFolderPath(folderBrowse.SelectedPath);
 
             // Fill the list with selected folder files
             string[] filenameArray = Directory.GetFiles(folderPath)
@@ -59,6 +58,8 @@ namespace FileClient
             {
                 LstView_Files.Items.Add(token);
             }
+
+            Btn_RequestFile.Enabled = true;
         }
 
         /*
