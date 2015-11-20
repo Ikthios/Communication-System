@@ -15,12 +15,21 @@ namespace VoiceClient
         {
             InitializeComponent();
 
-            // Disable start and stop buttons
+            // Disable stop button
             Btn_Stop.Enabled = false;
+
+            // Set default values on form load
             CmbBox_SampleRate.SelectedIndex = 7;
+            CmbBox_BitDepth.SelectedIndex = 0;
             Txt_ServAddress.Text = "127.0.0.1";
             Txt_ServPort.Text = "6000";
+
+            // List input devices on form load
             GetInputDevices();
+
+            // Start the listener on form load
+            Thread receivingThread = new Thread(Listener);
+            receivingThread.Start();
         }
 
         // Global variables
@@ -51,12 +60,10 @@ namespace VoiceClient
                     // Get the endpoint
                     endPoint = new IPEndPoint(IPAddress.Parse(Txt_ServAddress.Text),
                                                                 int.Parse(Txt_ServPort.Text));
-                    int sampleRate = int.Parse(CmbBox_SampleRate.Text);
+                    int bitRate = int.Parse(CmbBox_SampleRate.Text);
+                    int bitDepth = int.Parse(CmbBox_BitDepth.Text);
                     // Connect to the peer
-                    Connect(/*peerEndPoint,*/ LstView_Devices.SelectedItems[0].Index, sampleRate);
-                    // Start the listener
-                    Thread receivingThread = new Thread(Listener);
-                    receivingThread.Start();
+                    Connect(LstView_Devices.SelectedItems[0].Index, bitRate, bitDepth);
                 }
                 catch(Exception ex)
                 {
@@ -113,12 +120,12 @@ namespace VoiceClient
             }
         }
 
-        private void Connect(/*IPEndPoint endPoint,*/ int inputDeviceNumber, int sampleRate)
+        private void Connect(int inputDeviceNumber, int bitRate, int bitDepth)
         {
             sourcestream = new WaveIn();
             sourcestream.BufferMilliseconds = 50;
             sourcestream.DeviceNumber = inputDeviceNumber;
-            sourcestream.WaveFormat = new WaveFormat(sampleRate, WaveIn.GetCapabilities(inputDeviceNumber).Channels);
+            sourcestream.WaveFormat = new WaveFormat(bitRate, bitDepth, WaveIn.GetCapabilities(inputDeviceNumber).Channels);
             sourcestream.DataAvailable += sourcestream_DataAvailable;
             sourcestream.StartRecording();
 
@@ -153,6 +160,7 @@ namespace VoiceClient
             }
         }
 
+        
         class ListenerState
         {
             public IPEndPoint EndPoint { get; set; }

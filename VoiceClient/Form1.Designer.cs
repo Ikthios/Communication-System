@@ -32,19 +32,28 @@
             this.LstView_Devices = new System.Windows.Forms.ListView();
             this.DeviceColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ChannelColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.Txt_ServAddress = new System.Windows.Forms.TextBox();
             this.Txt_ServPort = new System.Windows.Forms.TextBox();
             this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
             this.Btn_Exit = new System.Windows.Forms.Button();
             this.Btn_Stop = new System.Windows.Forms.Button();
             this.Btn_Start = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.LstView_Friends = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label4 = new System.Windows.Forms.Label();
+            this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -55,10 +64,12 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.LstView_Devices);
+            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.label4);
+            this.splitContainer1.Panel2.Controls.Add(this.CmbBox_BitDepth);
             this.splitContainer1.Panel2.Controls.Add(this.label3);
             this.splitContainer1.Panel2.Controls.Add(this.label2);
             this.splitContainer1.Panel2.Controls.Add(this.label1);
@@ -69,7 +80,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.Btn_Stop);
             this.splitContainer1.Panel2.Controls.Add(this.Btn_Start);
             this.splitContainer1.Size = new System.Drawing.Size(584, 261);
-            this.splitContainer1.SplitterDistance = 233;
+            this.splitContainer1.SplitterDistance = 310;
             this.splitContainer1.TabIndex = 0;
             // 
             // LstView_Devices
@@ -80,7 +91,7 @@
             this.LstView_Devices.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LstView_Devices.Location = new System.Drawing.Point(0, 0);
             this.LstView_Devices.Name = "LstView_Devices";
-            this.LstView_Devices.Size = new System.Drawing.Size(233, 261);
+            this.LstView_Devices.Size = new System.Drawing.Size(310, 130);
             this.LstView_Devices.TabIndex = 0;
             this.LstView_Devices.UseCompatibleStateImageBehavior = false;
             this.LstView_Devices.View = System.Windows.Forms.View.Details;
@@ -94,10 +105,41 @@
             // 
             this.ChannelColumn.Text = "Channel";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label3.Location = new System.Drawing.Point(137, 206);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(60, 15);
+            this.label3.TabIndex = 16;
+            this.label3.Text = "IP Address";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label2.Location = new System.Drawing.Point(137, 232);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(28, 15);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Port";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label1.Location = new System.Drawing.Point(137, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(47, 15);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Bit Rate";
+            // 
             // Txt_ServAddress
             // 
             this.Txt_ServAddress.Location = new System.Drawing.Point(3, 203);
             this.Txt_ServAddress.Name = "Txt_ServAddress";
+            this.Txt_ServAddress.ReadOnly = true;
             this.Txt_ServAddress.Size = new System.Drawing.Size(128, 20);
             this.Txt_ServAddress.TabIndex = 13;
             // 
@@ -105,6 +147,7 @@
             // 
             this.Txt_ServPort.Location = new System.Drawing.Point(3, 229);
             this.Txt_ServPort.Name = "Txt_ServPort";
+            this.Txt_ServPort.ReadOnly = true;
             this.Txt_ServPort.Size = new System.Drawing.Size(128, 20);
             this.Txt_ServPort.TabIndex = 12;
             // 
@@ -120,7 +163,10 @@
             "22050",
             "32000",
             "44100",
-            "48000"});
+            "48000",
+            "64000",
+            "88200",
+            "96000"});
             this.CmbBox_SampleRate.Location = new System.Drawing.Point(3, 12);
             this.CmbBox_SampleRate.Name = "CmbBox_SampleRate";
             this.CmbBox_SampleRate.Size = new System.Drawing.Size(128, 21);
@@ -128,7 +174,7 @@
             // 
             // Btn_Exit
             // 
-            this.Btn_Exit.Location = new System.Drawing.Point(3, 97);
+            this.Btn_Exit.Location = new System.Drawing.Point(2, 124);
             this.Btn_Exit.Name = "Btn_Exit";
             this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
             this.Btn_Exit.TabIndex = 10;
@@ -138,7 +184,7 @@
             // 
             // Btn_Stop
             // 
-            this.Btn_Stop.Location = new System.Drawing.Point(3, 68);
+            this.Btn_Stop.Location = new System.Drawing.Point(2, 95);
             this.Btn_Stop.Name = "Btn_Stop";
             this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
             this.Btn_Stop.TabIndex = 8;
@@ -148,7 +194,7 @@
             // 
             // Btn_Start
             // 
-            this.Btn_Start.Location = new System.Drawing.Point(3, 39);
+            this.Btn_Start.Location = new System.Drawing.Point(2, 66);
             this.Btn_Start.Name = "Btn_Start";
             this.Btn_Start.Size = new System.Drawing.Size(128, 23);
             this.Btn_Start.TabIndex = 7;
@@ -156,35 +202,61 @@
             this.Btn_Start.UseVisualStyleBackColor = true;
             this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click_1);
             // 
-            // label1
+            // splitContainer2
             // 
-            this.label1.AutoSize = true;
-            this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label1.Location = new System.Drawing.Point(137, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 15);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Sample Rate";
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // label2
+            // splitContainer2.Panel1
             // 
-            this.label2.AutoSize = true;
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label2.Location = new System.Drawing.Point(137, 232);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(28, 15);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Port";
+            this.splitContainer2.Panel1.Controls.Add(this.LstView_Devices);
             // 
-            // label3
+            // splitContainer2.Panel2
             // 
-            this.label3.AutoSize = true;
-            this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label3.Location = new System.Drawing.Point(137, 206);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(60, 15);
-            this.label3.TabIndex = 16;
-            this.label3.Text = "IP Address";
+            this.splitContainer2.Panel2.Controls.Add(this.LstView_Friends);
+            this.splitContainer2.Size = new System.Drawing.Size(310, 261);
+            this.splitContainer2.SplitterDistance = 130;
+            this.splitContainer2.TabIndex = 0;
+            // 
+            // LstView_Friends
+            // 
+            this.LstView_Friends.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.LstView_Friends.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LstView_Friends.Location = new System.Drawing.Point(0, 0);
+            this.LstView_Friends.Name = "LstView_Friends";
+            this.LstView_Friends.Size = new System.Drawing.Size(310, 127);
+            this.LstView_Friends.TabIndex = 0;
+            this.LstView_Friends.UseCompatibleStateImageBehavior = false;
+            this.LstView_Friends.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Friends";
+            this.columnHeader1.Width = 120;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label4.Location = new System.Drawing.Point(137, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 15);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Bit Depth";
+            // 
+            // CmbBox_BitDepth
+            // 
+            this.CmbBox_BitDepth.FormattingEnabled = true;
+            this.CmbBox_BitDepth.Items.AddRange(new object[] {
+            "16",
+            "24"});
+            this.CmbBox_BitDepth.Location = new System.Drawing.Point(3, 39);
+            this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
+            this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
+            this.CmbBox_BitDepth.TabIndex = 17;
             // 
             // Form1
             // 
@@ -199,6 +271,10 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -218,6 +294,11 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.ListView LstView_Friends;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox CmbBox_BitDepth;
     }
 }
 
