@@ -10,7 +10,19 @@ namespace Server
 {
     class DatabaseWorker
     {
-        public string conString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Erick\\Source\\Repos\\Communication-System\\Server\\UserDatabase.mdf;Integrated Security=True;Connect Timeout=30";
+        public DatabaseWorker()
+        {
+            string startupPath = Environment.CurrentDirectory;
+            startupPath += @"\UserDatabase.mdf;";
+            string conString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=";
+            conString += startupPath;
+            conString += "Integrated Security=True;Connect Timeout=30";
+            this.conString = conString;
+        }
+
+        //Was using this earlier, so keep it.  Now it doesn't matter what computer run on.
+        //public string conString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Erick\\Source\\Repos\\Communication-System\\Server\\UserDatabase.mdf;Integrated Security=True;Connect Timeout=30";
+        public string conString;
 
         public void Insert(User user)
         {

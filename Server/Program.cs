@@ -12,16 +12,14 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            DatabaseWorker worker = new DatabaseWorker();
-            User test2 = new User();
-            User test = new User();
-            string startupPath = Environment.CurrentDirectory;
-            Console.WriteLine(startupPath);
-            Console.Read();
+            DatabaseWorker test = new DatabaseWorker();
+            User user1 = new User();
+            User user2 = new User();
+            test.AddFriend(user1, user2);
         }
     }
 
     
 
     
-}
+} 
