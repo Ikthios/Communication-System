@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceClient", "VoiceClient\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileClient", "FileClient\FileClient.csproj", "{E1B77141-5963-4236-A2C8-AD59F9C39A39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{E1B77141-5963-4236-A2C8-AD59F9C39A39}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E1B77141-5963-4236-A2C8-AD59F9C39A39}.Release|x86.ActiveCfg = Release|Any CPU
 		{E1B77141-5963-4236-A2C8-AD59F9C39A39}.Release|x86.Build.0 = Release|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A123A21-2AE8-4FF4-AC6C-CEFF895F7764}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
