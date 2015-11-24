@@ -43,6 +43,7 @@ namespace Server
                 while (true)
                 {
                     Socket connected = registrationListener.AcceptSocket();
+                    Console.WriteLine("Registraton connected");
                     RegistrationHandler handler = new RegistrationHandler(connected);
                     handler.StartHandling();
                 }
@@ -54,7 +55,7 @@ namespace Server
 
         private void AddFriendListener()
         {
-            addFriendListener = new TcpListener(IPAddress.Parse(GetIpAddress()), 7000);
+            addFriendListener = new TcpListener(IPAddress.Parse(GetIpAddress()), 8000);
             try
             {
                 addFriendListener.Start();
@@ -88,10 +89,8 @@ namespace Server
 
         static void Main(string[] args)
         {
-            string test = "hello,there,clarice,";
-            string[] mack = test.Split(',');
-            Console.WriteLine(mack.Length);
-            Console.Read();
-        }
+            Server temp = new Server();
+            temp.RegistrationListener();
+            DatabaseWorker worker = new DatabaseWorker();       }
     }
 } 
