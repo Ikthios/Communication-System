@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+
     class AddFriendHandler
     {
         DatabaseWorker worker = new DatabaseWorker();
