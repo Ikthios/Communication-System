@@ -16,6 +16,8 @@ namespace Server
         TcpListener loginListener;
         TcpListener registrationListener;
         TcpListener addFriendListener;
+        TcpListener getFriendsListener;
+
         private void LoginListener()
         {
             loginListener = new TcpListener(IPAddress.Parse(GetIpAddress()), 6000);
@@ -71,6 +73,23 @@ namespace Server
             }
         }
 
+        private void GetFriendsListener()
+        {
+            getFriendsListener = new TcpListener(IPAddress.Parse(GetIpAddress()), 9000);
+            try
+            {
+                getFriendsListener.Start();
+                while (true)
+                {
+                    Socket connected = getFriendsListener.AcceptSocket();
+                    FriendListHandler handler = new FriendListHandler(connected);
+                    handler.StartHandling();
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
 
         public string GetIpAddress()
         {
@@ -90,7 +109,16 @@ namespace Server
         static void Main(string[] args)
         {
             Server temp = new Server();
-            temp.RegistrationListener();
+
+            Thread registration = new Thread(temp.RegistrationListener);
+            registration.Start();
+
+            Thread login = new Thread(temp.LoginListener);
+            login.Start();
+
+            Thread friendsList = new Thread(temp.GetFriendsListener);
+            friendsList.Start();
+
             DatabaseWorker worker = new DatabaseWorker();       }
     }
 } 

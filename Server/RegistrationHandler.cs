@@ -48,7 +48,7 @@ namespace Server
             }
             else
             {
-                string failed = "Unable to complete registration - Username taken";
+                string failed = "FAILED, Username Taken";
                 byte[] message = encoding.GetBytes(failed);
 
                 byteCount = clientSocket.Send(message);
@@ -62,7 +62,7 @@ namespace Server
             User temp = new User(info);
             worker.AddUser(temp);
 
-            string success = "Success";
+            string success = "SUCCESS";
             byte[] message = encoding.GetBytes(success);
 
             byteCount = clientSocket.Send(message);

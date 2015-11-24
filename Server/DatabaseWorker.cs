@@ -328,7 +328,7 @@ namespace Server
                 using (SqlConnection connection = new SqlConnection(conString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT FriendUsername FROM Friends WHERE Username = @Username", connection);
+                    SqlCommand command = new SqlCommand("SELECT FriendUsername, FriendIP FROM Friends WHERE Username = @Username", connection);
 
                     command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
                     command.Parameters["@Username"].Value = username;
@@ -341,6 +341,7 @@ namespace Server
                             while (reader.Read())
                             {
                                 values.Add(reader.GetString(0));
+                                values.Add(reader.GetString(1));
                             }
                         }
                         finally

@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AddFriendHandler.cs" />
     <Compile Include="DatabaseWorker.cs" />
+    <Compile Include="FriendListHandler.cs" />
     <Compile Include="FriendNotificationHandler.cs" />
     <Compile Include="LoginHandler.cs" />
     <Compile Include="PendingRequest.cs" />

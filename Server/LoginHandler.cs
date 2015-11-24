@@ -46,7 +46,7 @@ namespace Server
             }
             else
             {
-                string failed = "Failed";
+                string failed = "FAILED";
                 byte[] message = encoding.GetBytes(failed);
 
                 byteCount = clientSocket.Send(message);
@@ -58,14 +58,12 @@ namespace Server
         {
             int bytecount;
             List<String> values = worker.getUsernameInfo(username);
-            string replyString = "";
+            string replyString = "SUCCESS,";
 
             foreach(var item in values)
             {
                 replyString += item + ",";
             }
-
-            replyString.TrimEnd(',');
 
             byte[] message = encoding.GetBytes(replyString);
 
