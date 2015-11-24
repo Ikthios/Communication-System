@@ -24,6 +24,44 @@ namespace Server
         //public string conString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Erick\\Source\\Repos\\Communication-System\\Server\\UserDatabase.mdf;Integrated Security=True;Connect Timeout=30";
         public string conString;
 
+        public void UpdateIPAddress(string username, string ip)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    connection.Open();
+
+                    SqlCommand command = new SqlCommand("UPDATE Users SET IP = @IP WHERE Username = @Username", connection);
+
+                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Username"].Value = username;
+
+                    command.Parameters.Add("@IP", SqlDbType.NVarChar, 50);
+                    command.Parameters["@IP"].Value = ip;
+
+                    command.ExecuteNonQuery();
+
+                    command = new SqlCommand("UPDATE Friends SET FriendIP = @IP WHERE FriendUsername = @Username", connection);
+
+                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Username"].Value = username;
+
+                    command.Parameters.Add("@IP", SqlDbType.NVarChar, 50);
+                    command.Parameters["@IP"].Value = ip;
+
+                    command.ExecuteNonQuery();
+
+                    connection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+
         public void AddUser(User user)
         {
             try
@@ -86,28 +124,6 @@ namespace Server
 
                     command.Parameters.Add("@FriendIP", SqlDbType.NVarChar, 50);
                     command.Parameters["@FriendIP"].Value = friend.IP;
-
-                    command.ExecuteNonQuery();
-                    connection.Close();
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(conString))
-                {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("INSERT INTO Friends (Username, FriendUsername) VALUES "
-                        + "(@Username, @FriendUsername)", connection);
-
-                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
-                    command.Parameters["@Username"].Value = friend.Username;
-
-                    command.Parameters.Add("@FriendUsername", SqlDbType.NVarChar, 50);
-                    command.Parameters["@FriendUsername"].Value = user.Username;
 
                     command.ExecuteNonQuery();
                     connection.Close();
@@ -198,6 +214,43 @@ namespace Server
             }
         }
 
+        public List<PendingRequest> GetPendingFriendRequests()
+        {
+            List<PendingRequest> values = new List<PendingRequest>();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT Username, FriendUsername, FriendIP FROM Users WHERE Accepted = 0", connection);
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    try
+                    {
+                        while (reader.Read())
+                        {
+                            PendingRequest temp = new PendingRequest();
+                            temp.Username = reader[0].ToString();
+                            temp.Username = reader[1].ToString();
+                            temp.IP = reader[2].ToString();
+                            values.Add(temp);
+                        }
+                        return values;
+                    }
+                    catch(Exception e)
+                    {
+
+                    }
+                }
+                return values;
+            }
+            catch (Exception e)
+            {
+                return values;
+            }
+        }
+
         public int getNumberOfColumnsUsers()
         {
             int columns = 0;
@@ -224,7 +277,7 @@ namespace Server
                 }
                 return columns;
             }
-            
+
             catch (Exception e)
             {
                 Console.WriteLine(e);
@@ -321,7 +374,7 @@ namespace Server
 
                     SqlDataReader reader = command.ExecuteReader();
 
-                    if(reader.HasRows)
+                    if (reader.HasRows)
                     {
                         return true;
                     }
@@ -331,6 +384,58 @@ namespace Server
             catch (Exception e)
             {
                 return false;
+            }
+        }
+
+        public void reject(User user, User friend)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("DELETE FROM Friends WHERE Username = @FriendUsername AND @FriendUsername AND FriendUsername = @Username", connection);
+
+                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Username"].Value = user.Username;
+
+                    command.Parameters.Add("@FriendUsername", SqlDbType.NVarChar, 50);
+                    command.Parameters["@FriendUsername"].Value = friend.Username;
+
+                    command.ExecuteNonQuery();
+
+                    connection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
+
+        public void setToAccept(User user, User friend)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("UPDATE Friends SET Accepted = 1 WHERE Username = @FriendUsername AND FriendUsername = @Username", connection);
+
+                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Username"].Value = user.Username;
+
+                    command.Parameters.Add("@FriendUsername", SqlDbType.NVarChar, 50);
+                    command.Parameters["@FriendUsername"].Value = friend.Username;
+
+                    command.ExecuteNonQuery();
+
+                    connection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+
             }
         }
     }

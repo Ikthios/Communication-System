@@ -21,11 +21,11 @@ namespace Server
 
         public void StartHandling()
         {
-            Thread handler = new Thread(AddFriendRequest);
+            Thread handler = new Thread(FriendRequest);
             handler.Start();
         }
 
-        public void AddFriendRequest()
+        public void FriendRequest()
         {
             string request = "";
 
@@ -39,12 +39,77 @@ namespace Server
 
             if(package[0] == "ADD")
             {
+                User user = new User();
+                user.Username = package[1];
 
+                User friend = new User();
+                friend.Username = package[2];
+                friend.IP = package[3];
+
+                bool areFriends = checkIfFriends(user.Username, friend.Username);
+
+                if(areFriends)
+                {
+                    string info = "Already added by friend.";
+                    byte[] message = encoding.GetBytes(info);
+
+                    byteCount = clientSocket.Send(message);
+                    clientSocket.Close();
+                }
+                else
+                {
+                    worker.AddFriend(user, friend);
+                }
             }
+
             if(package[1] == "ACCEPT")
             {
+                User user = new User();
+                user.Username = package[1];
 
+                User friend = new User();
+                friend.Username = package[2];
+
+                worker.setToAccept(user, friend);
+
+                string info = "Friend request accepted.";
+                byte[] message = encoding.GetBytes(info);
+
+                byteCount = clientSocket.Send(message);
+                clientSocket.Close();
             }
+
+            if(package[1] == "REJECT")
+            {
+                User user = new User();
+                user.Username = package[1];
+
+                User friend = new User();
+                friend.Username = package[2];
+
+                worker.reject(user, friend);
+
+                string info = "Friend request rejected.";
+                byte[] message = encoding.GetBytes(info);
+
+                byteCount = clientSocket.Send(message);
+                clientSocket.Close();
+            } 
+        }
+
+        public bool checkIfFriends(string userName, string FriendUsername)
+        {
+            bool areFriends = false;
+            List<string> friends = worker.getFriendsList(userName);
+
+            foreach(string f in friends)
+            {
+                if(f.Equals(FriendUsername))
+                {
+                    areFriends = true;
+                }
+            }
+            return areFriends;
         }
     }
 }

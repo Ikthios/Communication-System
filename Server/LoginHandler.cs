@@ -41,6 +41,7 @@ namespace Server
 
             if(success)
             {
+                worker.UpdateIPAddress(credentials[0], credentials[2]);
                 SendUserInfo(credentials[0]);
             }
             else
