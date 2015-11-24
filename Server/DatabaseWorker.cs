@@ -31,8 +31,8 @@ namespace Server
                 using (SqlConnection connection = new SqlConnection(conString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("INSERT INTO Users (Username, Password, Name, Email, Address, Phone, DateOfBirth) VALUES "
-                        + "(@Username, @Password, @Name, @Email, @Address, @Phone, @DateOfBirth)", connection);
+                    SqlCommand command = new SqlCommand("INSERT INTO Users (Username, Password, Name, Email, Address, Phone, DateOfBirth, IP) VALUES "
+                        + "(@Username, @Password, @Name, @Email, @Address, @Phone, @DateOfBirth, @IP)", connection);
 
                     command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
                     command.Parameters["@Username"].Value = user.Username;
@@ -55,6 +55,9 @@ namespace Server
                     command.Parameters.Add("@DateOfBirth", SqlDbType.DateTime);
                     command.Parameters["@DateOfBirth"].Value = user.DateOfBirth;
 
+                    command.Parameters.Add("@IP", SqlDbType.NVarChar, 50);
+                    command.Parameters["@IP"].Value = user.IP;
+
                     command.ExecuteNonQuery();
                     connection.Close();
                 }
@@ -72,14 +75,17 @@ namespace Server
                 using (SqlConnection connection = new SqlConnection(conString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("INSERT INTO Friends (Username, FriendUsername) VALUES "
-                        + "(@Username, @FriendUsername)", connection);
+                    SqlCommand command = new SqlCommand("INSERT INTO Friends (Username, FriendUsername, FriendIP) VALUES "
+                        + "(@Username, @FriendUsername, @FriendIP)", connection);
 
                     command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
                     command.Parameters["@Username"].Value = user.Username;
 
                     command.Parameters.Add("@FriendUsername", SqlDbType.NVarChar, 50);
                     command.Parameters["@FriendUsername"].Value = friend.Username;
+
+                    command.Parameters.Add("@FriendIP", SqlDbType.NVarChar, 50);
+                    command.Parameters["@FriendIP"].Value = friend.IP;
 
                     command.ExecuteNonQuery();
                     connection.Close();
@@ -131,7 +137,6 @@ namespace Server
 
             }
         }
-
 
         public void ClearUsersTable()
         {
@@ -296,6 +301,36 @@ namespace Server
             catch (Exception e)
             {
                 return values;
+            }
+        }
+
+        public Boolean login(string username, string password)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("SELECT Username, Password FROM Users WHERE Username = @Username AND Password = @Password", connection);
+
+                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Username"].Value = username;
+
+                    command.Parameters.Add("@Password", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Password"].Value = password;
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if(reader.HasRows)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception e)
+            {
+                return false;
             }
         }
     }

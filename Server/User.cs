@@ -15,6 +15,7 @@ namespace Server
         string address;
         string phone;
         DateTime dateOfBirth;
+        string ip;
 
         public User()
         {
@@ -25,9 +26,10 @@ namespace Server
             Address = "";
             Phone = "";
             DateOfBirth = new DateTime(1900, 1, 1);
+            ip = "";
         }
 
-        public User(string username, string password, string name, string email, string address, string phone, int year, int month, int day)
+        public User(string username, string password, string name, string email, string address, string phone, int year, int month, int day, string ip)
         {
             Username = username;
             Password = password;
@@ -36,6 +38,7 @@ namespace Server
             Address = address;
             Phone = phone;
             DateOfBirth = new DateTime(year, month, day);
+            IP = ip;
         }
 
         public string Username
@@ -78,6 +81,12 @@ namespace Server
         {
             get { return dateOfBirth; }
             set { dateOfBirth = value;  }
+        }
+
+        public string IP
+        {
+            get { return ip; }
+            set { ip = value; }
         }
     }
 }
