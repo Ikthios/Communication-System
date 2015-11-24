@@ -31,20 +31,22 @@
             this.Txt_Username = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.LstView_Peers = new System.Windows.Forms.ListView();
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.LstView_Requests = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.LstView_Friends = new System.Windows.Forms.ListView();
             this.columnPeer = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.Btn_Connect = new System.Windows.Forms.Button();
-            this.Txt_Address = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.loginPage = new System.Windows.Forms.TabPage();
-            this.commPage = new System.Windows.Forms.TabPage();
-            this.LstView_Requests = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.LstView_Peers = new System.Windows.Forms.ListView();
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label3 = new System.Windows.Forms.Label();
             this.Txt_Password = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.Btn_Connect = new System.Windows.Forms.Button();
+            this.Txt_Address = new System.Windows.Forms.TextBox();
+            this.commPage = new System.Windows.Forms.TabPage();
+            this.registerPage = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -52,6 +54,7 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.loginPage.SuspendLayout();
+            this.registerPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // Txt_Username
@@ -93,6 +96,40 @@
             this.splitContainer1.SplitterDistance = 210;
             this.splitContainer1.TabIndex = 2;
             // 
+            // LstView_Peers
+            // 
+            this.LstView_Peers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader2});
+            this.LstView_Peers.Dock = System.Windows.Forms.DockStyle.Top;
+            this.LstView_Peers.Location = new System.Drawing.Point(0, 200);
+            this.LstView_Peers.Name = "LstView_Peers";
+            this.LstView_Peers.Size = new System.Drawing.Size(210, 97);
+            this.LstView_Peers.TabIndex = 2;
+            this.LstView_Peers.UseCompatibleStateImageBehavior = false;
+            this.LstView_Peers.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Connected Peers";
+            this.columnHeader2.Width = 200;
+            // 
+            // LstView_Requests
+            // 
+            this.LstView_Requests.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.LstView_Requests.Dock = System.Windows.Forms.DockStyle.Top;
+            this.LstView_Requests.Location = new System.Drawing.Point(0, 103);
+            this.LstView_Requests.Name = "LstView_Requests";
+            this.LstView_Requests.Size = new System.Drawing.Size(210, 97);
+            this.LstView_Requests.TabIndex = 1;
+            this.LstView_Requests.UseCompatibleStateImageBehavior = false;
+            this.LstView_Requests.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Friend Requests";
+            this.columnHeader1.Width = 200;
+            // 
             // LstView_Friends
             // 
             this.LstView_Friends.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -119,27 +156,9 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(370, 301);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
-            // Btn_Connect
-            // 
-            this.Btn_Connect.Location = new System.Drawing.Point(6, 78);
-            this.Btn_Connect.Name = "Btn_Connect";
-            this.Btn_Connect.Size = new System.Drawing.Size(265, 23);
-            this.Btn_Connect.TabIndex = 0;
-            this.Btn_Connect.Text = "Login";
-            this.Btn_Connect.UseVisualStyleBackColor = true;
-            this.Btn_Connect.Click += new System.EventHandler(this.Btn_Connect_Click);
-            // 
-            // Txt_Address
-            // 
-            this.Txt_Address.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Txt_Address.Location = new System.Drawing.Point(6, 240);
-            this.Txt_Address.Name = "Txt_Address";
-            this.Txt_Address.ReadOnly = true;
-            this.Txt_Address.Size = new System.Drawing.Size(183, 22);
-            this.Txt_Address.TabIndex = 3;
-            // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.registerPage);
             this.tabControl1.Controls.Add(this.loginPage);
             this.tabControl1.Controls.Add(this.commPage);
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
@@ -164,49 +183,13 @@
             this.loginPage.Text = "Login";
             this.loginPage.UseVisualStyleBackColor = true;
             // 
-            // commPage
+            // Txt_Password
             // 
-            this.commPage.Location = new System.Drawing.Point(4, 22);
-            this.commPage.Name = "commPage";
-            this.commPage.Padding = new System.Windows.Forms.Padding(3);
-            this.commPage.Size = new System.Drawing.Size(356, 268);
-            this.commPage.TabIndex = 1;
-            this.commPage.Text = "Communicate";
-            this.commPage.UseVisualStyleBackColor = true;
-            // 
-            // LstView_Requests
-            // 
-            this.LstView_Requests.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-            this.LstView_Requests.Dock = System.Windows.Forms.DockStyle.Top;
-            this.LstView_Requests.Location = new System.Drawing.Point(0, 103);
-            this.LstView_Requests.Name = "LstView_Requests";
-            this.LstView_Requests.Size = new System.Drawing.Size(210, 97);
-            this.LstView_Requests.TabIndex = 1;
-            this.LstView_Requests.UseCompatibleStateImageBehavior = false;
-            this.LstView_Requests.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Friend Requests";
-            this.columnHeader1.Width = 200;
-            // 
-            // LstView_Peers
-            // 
-            this.LstView_Peers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader2});
-            this.LstView_Peers.Dock = System.Windows.Forms.DockStyle.Top;
-            this.LstView_Peers.Location = new System.Drawing.Point(0, 200);
-            this.LstView_Peers.Name = "LstView_Peers";
-            this.LstView_Peers.Size = new System.Drawing.Size(210, 97);
-            this.LstView_Peers.TabIndex = 2;
-            this.LstView_Peers.UseCompatibleStateImageBehavior = false;
-            this.LstView_Peers.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Connected Peers";
-            this.columnHeader2.Width = 200;
+            this.Txt_Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Txt_Password.Location = new System.Drawing.Point(88, 34);
+            this.Txt_Password.Name = "Txt_Password";
+            this.Txt_Password.Size = new System.Drawing.Size(183, 22);
+            this.Txt_Password.TabIndex = 5;
             // 
             // label3
             // 
@@ -219,13 +202,52 @@
             this.label3.TabIndex = 4;
             this.label3.Text = "Password";
             // 
-            // Txt_Password
+            // Btn_Connect
             // 
-            this.Txt_Password.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Txt_Password.Location = new System.Drawing.Point(88, 34);
-            this.Txt_Password.Name = "Txt_Password";
-            this.Txt_Password.Size = new System.Drawing.Size(183, 22);
-            this.Txt_Password.TabIndex = 5;
+            this.Btn_Connect.Location = new System.Drawing.Point(6, 78);
+            this.Btn_Connect.Name = "Btn_Connect";
+            this.Btn_Connect.Size = new System.Drawing.Size(265, 23);
+            this.Btn_Connect.TabIndex = 0;
+            this.Btn_Connect.Text = "Login";
+            this.Btn_Connect.UseVisualStyleBackColor = true;
+            this.Btn_Connect.Click += new System.EventHandler(this.Btn_Connect_Click);
+            // 
+            // Txt_Address
+            // 
+            this.Txt_Address.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Txt_Address.Location = new System.Drawing.Point(6, 240);
+            this.Txt_Address.Name = "Txt_Address";
+            this.Txt_Address.ReadOnly = true;
+            this.Txt_Address.Size = new System.Drawing.Size(183, 22);
+            this.Txt_Address.TabIndex = 3;
+            // 
+            // commPage
+            // 
+            this.commPage.Location = new System.Drawing.Point(4, 22);
+            this.commPage.Name = "commPage";
+            this.commPage.Padding = new System.Windows.Forms.Padding(3);
+            this.commPage.Size = new System.Drawing.Size(356, 268);
+            this.commPage.TabIndex = 1;
+            this.commPage.Text = "Communicate";
+            this.commPage.UseVisualStyleBackColor = true;
+            // 
+            // registerPage
+            // 
+            this.registerPage.Controls.Add(this.textBox1);
+            this.registerPage.Location = new System.Drawing.Point(4, 22);
+            this.registerPage.Name = "registerPage";
+            this.registerPage.Padding = new System.Windows.Forms.Padding(3);
+            this.registerPage.Size = new System.Drawing.Size(356, 268);
+            this.registerPage.TabIndex = 2;
+            this.registerPage.Text = "Register";
+            this.registerPage.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(60, 93);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 0;
             // 
             // Form1
             // 
@@ -243,6 +265,8 @@
             this.tabControl1.ResumeLayout(false);
             this.loginPage.ResumeLayout(false);
             this.loginPage.PerformLayout();
+            this.registerPage.ResumeLayout(false);
+            this.registerPage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -266,6 +290,8 @@
         private System.Windows.Forms.TabPage commPage;
         private System.Windows.Forms.TextBox Txt_Password;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TabPage registerPage;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
