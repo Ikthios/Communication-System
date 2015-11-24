@@ -104,6 +104,41 @@ namespace PeerInterface
             }
         }
 
+        private void Btn_RegUser_Click(object sender, EventArgs e)
+        {
+            Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint regEP = new IPEndPoint(IPAddress.Parse(Txt_RegServAddr.Text), 7000);
+
+            try
+            {
+                string regMessage = (Txt_RegUsername.Text + ',' +
+                    Txt_RegsiterPassword.Text + ',' +
+                    Txt_RegName.Text + ',' +
+                    Txt_RegEmail.Text + ',' +
+                    Txt_RegHomeAddr.Text + ',' +
+                    Txt_RegPhoneNum.Text + ',' +
+                    Txt_RegDobYear.Text + ',' +
+                    Txt_RegDobMonth.Text + ',' +
+                    Txt_RegDobDay.Text + ',' +
+                    GetIpAddress() + ',');
+                regSocket.Connect(regEP);
+                regSocket.Send(Encoding.ASCII.GetBytes(regMessage));
+
+                byte[] buffer = new byte[1500];
+                string dataString = "";
+                regSocket.Receive(buffer);
+                for(int i=0; i<buffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(buffer[i]);
+                }
+                Txt_SuccessAck.Text = dataString;
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
+
         // Get peer IP address
         public string GetIpAddress()
         {
