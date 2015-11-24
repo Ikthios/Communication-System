@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PeerInterface
@@ -31,10 +25,66 @@ namespace PeerInterface
 
             // Show peer address to user
             Txt_Address.Text = GetIpAddress();
+            Txt_LoginServAddress.Text = "10.134.172.46";
         }
 
+
+
+        /*
+        This is the register feature of the peer interface. It will allow a user
+        to input their information and register a user with the login server.
+        */
+        private void Btn_RegUser_Click(object sender, EventArgs e)
+        {
+            Thread registerThread = new Thread(new ThreadStart(Register));
+            registerThread.Start();
+        }
+
+        private void Register()
+        {
+            Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint regEP = new IPEndPoint(IPAddress.Parse(Txt_RegServAddr.Text), 7000);
+
+            try
+            {
+                string regMessage = (Txt_RegUsername.Text + ',' +
+                    Txt_RegsiterPassword.Text + ',' +
+                    Txt_RegName.Text + ',' +
+                    Txt_RegEmail.Text + ',' +
+                    Txt_RegHomeAddr.Text + ',' +
+                    Txt_RegPhoneNum.Text + ',' +
+                    Txt_RegDobYear.Text + ',' +
+                    Txt_RegDobMonth.Text + ',' +
+                    Txt_RegDobDay.Text + ',' +
+                    GetIpAddress() + ',');
+                regSocket.Connect(regEP);
+                regSocket.Send(Encoding.ASCII.GetBytes(regMessage));
+
+                byte[] buffer = new byte[1500];
+                string dataString = "";
+                regSocket.Receive(buffer);
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(buffer[i]);
+                }
+                Txt_SuccessAck.Text = dataString;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+
+
+        /*
+        This is the login feature for the peer interface. It will start a new
+        thread which will attempt to connect to the login server and retreive
+        its' information.
+        */
         private void Btn_Connect_Click(object sender, EventArgs e)
         {
+            /*
             sendThread = new Thread(new ThreadStart(UdpSender));
             listenThread = new Thread(new ThreadStart(UdpListener));
 
@@ -47,9 +97,131 @@ namespace PeerInterface
             else
             {
                 MessageBox.Show("Username required.");
+            }*/
+
+            //Thread loginThread = new Thread(new ThreadStart(Login));
+            //loginThread.Start();
+
+            string username = Txt_Username.Text;
+            string password = Txt_Password.Text;
+            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
+            string loginMessage = username + ',' + password + ',' + GetIpAddress() + ',';
+
+            try
+            {
+                // Login and get user information
+                loginSocket.Connect(loginEP);
+                loginSocket.Send(Encoding.ASCII.GetBytes(loginMessage));
+
+                byte[] buffer = new byte[1500];
+                string dataString = "";
+                loginSocket.Receive(buffer);
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(buffer[i]);
+                }
+                string[] tokens = dataString.Split(',');
+                if (tokens[0].Equals("SUCCESS"))
+                    Btn_Connect.Enabled = false;
+                Txt_AccountInfo.Text = dataString;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+
+            try
+            {
+                Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint friendEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 9000);
+                friendSocket.Connect(friendEP);
+                // Send username and get friend listing
+                friendSocket.Send(Encoding.ASCII.GetBytes(username));
+                byte[] friendBuffer = new byte[1500];
+                string dataString = "";
+                friendSocket.Receive(friendBuffer);
+                for (int i = 0; i < friendBuffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(friendBuffer[i]);
+                }
+                Txt_FriendList.Text = dataString;
+                string[] tokens = dataString.Split(',');
+                foreach (var friend in tokens)
+                {
+                    LstView_Friends.Items.Add(friend);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
+        private void Login()
+        {
+            string username = Txt_Username.Text;
+            string password = Txt_Password.Text;
+            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
+            string loginMessage = username + ',' + password + ',' + GetIpAddress() + ',';
+
+            try
+            {
+                // Login and get user information
+                loginSocket.Connect(loginEP);
+                loginSocket.Send(Encoding.ASCII.GetBytes(loginMessage));
+
+                byte[] buffer = new byte[1500];
+                string dataString = "";
+                loginSocket.Receive(buffer);
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(buffer[i]);
+                }
+                string[] tokens = dataString.Split(',');
+                if (tokens[0].Equals("SUCCESS"))
+                    Btn_Connect.Enabled = false;
+                Txt_AccountInfo.Text = dataString;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+
+        private void GetFriendList()
+        {
+            string username = Txt_Username.Text;
+            string password = Txt_Password.Text;
+            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
+
+            // Send username and get friend listing
+            loginSocket.Send(Encoding.ASCII.GetBytes(username));
+            byte[] friendBuffer = new byte[1500];
+            string dataString = "";
+            loginSocket.Receive(friendBuffer);
+            for (int i = 0; i < friendBuffer.Length; i++)
+            {
+                dataString += Convert.ToChar(friendBuffer[i]);
+            }
+            string[] tokens = dataString.Split(',');
+            foreach (var friend in tokens)
+            {
+                LstView_Friends.Items.Add(friend);
+            }
+        }
+
+
+
+        /*
+        This is the P2P communication feature of the peer interface. It will send
+        out UDP signals with the username and peer IP address in an attempt to
+        connect to other peers on the network and get their username and IP address
+        so the user can select and send a friend request.
+        */
         // This will broadcast the peer information to the network
         private void UdpSender()
         {
@@ -62,7 +234,7 @@ namespace PeerInterface
             while (true)
             {
                 socket.Connect(hostEP);
-                socket.Send(ASCIIEncoding.ASCII.GetBytes(message));
+                socket.Send(Encoding.ASCII.GetBytes(message));
             }
         }
 
@@ -104,40 +276,6 @@ namespace PeerInterface
             }
         }
 
-        private void Btn_RegUser_Click(object sender, EventArgs e)
-        {
-            Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint regEP = new IPEndPoint(IPAddress.Parse(Txt_RegServAddr.Text), 7000);
-
-            try
-            {
-                string regMessage = (Txt_RegUsername.Text + ',' +
-                    Txt_RegsiterPassword.Text + ',' +
-                    Txt_RegName.Text + ',' +
-                    Txt_RegEmail.Text + ',' +
-                    Txt_RegHomeAddr.Text + ',' +
-                    Txt_RegPhoneNum.Text + ',' +
-                    Txt_RegDobYear.Text + ',' +
-                    Txt_RegDobMonth.Text + ',' +
-                    Txt_RegDobDay.Text + ',' +
-                    GetIpAddress() + ',');
-                regSocket.Connect(regEP);
-                regSocket.Send(Encoding.ASCII.GetBytes(regMessage));
-
-                byte[] buffer = new byte[1500];
-                string dataString = "";
-                regSocket.Receive(buffer);
-                for(int i=0; i<buffer.Length; i++)
-                {
-                    dataString += Convert.ToChar(buffer[i]);
-                }
-                Txt_SuccessAck.Text = dataString;
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-            }
-        }
 
         // Get peer IP address
         public string GetIpAddress()
