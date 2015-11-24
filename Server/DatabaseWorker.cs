@@ -98,6 +98,7 @@ namespace Server
 
                     command.ExecuteNonQuery();
                     connection.Close();
+
                 }
             }
             catch (Exception e)
