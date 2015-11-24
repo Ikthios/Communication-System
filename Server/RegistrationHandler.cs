@@ -33,7 +33,10 @@ namespace Server
             byte[] incoming = new byte[1500];
             byteCount = clientSocket.Receive(incoming);
 
-            request = encoding.GetString(incoming);
+            for(int i = 0; i < incoming.Length; i++)
+            {
+                request += Convert.ToChar(incoming[i]);
+            }
 
             string[] userInfo = request.Split(',');
 
