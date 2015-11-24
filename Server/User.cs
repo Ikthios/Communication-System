@@ -41,6 +41,18 @@ namespace Server
             IP = ip;
         }
 
+        public User(string [] info)
+        {
+            Username = info[0];
+            Password = info[1];
+            Name = info[2];
+            Email = info[3];
+            Address = info[4];
+            Phone = info[5];
+            DateOfBirth = new DateTime(Int32.Parse(info[6]), Int32.Parse(info[7]), Int32.Parse(info[8]));
+            IP = info[9];
+        }
+
         public string Username
         {
             get { return username; }

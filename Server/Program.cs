@@ -15,7 +15,7 @@ namespace Server
     {
         TcpListener loginListener;
         TcpListener registrationListener;
-
+        TcpListener addFriendListener;
         private void LoginListener()
         {
             loginListener = new TcpListener(IPAddress.Parse(GetIpAddress()), 6000);
@@ -44,6 +44,24 @@ namespace Server
                 {
                     Socket connected = registrationListener.AcceptSocket();
                     RegistrationHandler handler = new RegistrationHandler(connected);
+                    handler.StartHandling();
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void AddFriendListener()
+        {
+            addFriendListener = new TcpListener(IPAddress.Parse(GetIpAddress()), 7000);
+            try
+            {
+                addFriendListener.Start();
+                while (true)
+                {
+                    Socket connected = addFriendListener.AcceptSocket();
+                    AddFriendHandler handler = new AddFriendHandler(connected);
                     handler.StartHandling();
                 }
             }
