@@ -26,6 +26,12 @@ namespace PeerInterface
             // Show peer address to user
             Txt_Address.Text = GetIpAddress();
             Txt_LoginServAddress.Text = "10.134.172.46";
+
+            sendThread = new Thread(new ThreadStart(UdpSender));
+            listenThread = new Thread(new ThreadStart(UdpListener));
+            // Start sender and listener threads
+            sendThread.Start();
+            listenThread.Start();
         }
 
 
@@ -145,7 +151,6 @@ namespace PeerInterface
                 {
                     dataString += Convert.ToChar(friendBuffer[i]);
                 }
-                Txt_FriendList.Text = dataString;
                 string[] tokens = dataString.Split(',');
                 foreach (var friend in tokens)
                 {
@@ -226,15 +231,17 @@ namespace PeerInterface
         private void UdpSender()
         {
             string username = Txt_Username.Text;
-            string message = username + "," + GetIpAddress();
+            //string message = username + "," + GetIpAddress();
+            string message = "username," + GetIpAddress();
 
-            hostEP = new IPEndPoint(IPAddress.Broadcast, 6000);
+            hostEP = new IPEndPoint(IPAddress.Broadcast, 6500);
 
             // Loop the broadcast signal
             while (true)
             {
                 socket.Connect(hostEP);
                 socket.Send(Encoding.ASCII.GetBytes(message));
+                Thread.Sleep(5000);
             }
         }
 
@@ -242,7 +249,7 @@ namespace PeerInterface
         private void UdpListener()
         {
             peerReceiver = new UdpClient();
-            listenEP = new IPEndPoint(IPAddress.Any, 6000);
+            listenEP = new IPEndPoint(IPAddress.Any, 6500);
 
             // Create a byte array to hold the incoming data
             byte[] receivedBytes = new byte[1500];
