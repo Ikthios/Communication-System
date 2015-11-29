@@ -237,22 +237,24 @@ namespace PeerInterface
             //string message = username + "," + GetIpAddress();
             string message = "username," + GetIpAddress();
             byte[] byteMessage = Encoding.ASCII.GetBytes(message);
-
             hostEP = new IPEndPoint(IPAddress.Broadcast, 6500);
 
+
             // Loop the broadcast signal
-            while (true)
+            try
             {
-                try
+                while (true)
                 {
                     socket.Connect(hostEP);
                     socket.Send(Encoding.ASCII.GetBytes(message));
+                    Debug.WriteLine("Send message: " + message);
                     Thread.Sleep(5000);
                 }
-                catch(Exception ex)
-                {
-                    Debug.WriteLine(ex.ToString());
-                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -261,38 +263,31 @@ namespace PeerInterface
         {
             peerReceiver = new UdpClient(6500);
             listenEP = new IPEndPoint(IPAddress.Any, 6500);
-
-            // Create a byte array to hold the incoming data
-            byte[] receivedBytes = new byte[1500];
-            string incomingMessage = "";
+            string incomingMessage;
+            byte[] dataBytes;
 
             try
             {
-                // Listen for other peers
-                //peerReceiver.Client.Bind(listenEP);
-                //peerReceiver.Receive(ref listenEP);
-
                 while (true)
                 {
-                    // Receive the incoming byte array over the server socket
-                    //int receivedSize = socket.Receive(receivedBytes);
-                    receivedBytes = peerReceiver.Receive(ref listenEP);
-
-                    for (int i = 0; i < receivedBytes.Length; i++)
-                    {
-                        incomingMessage += Convert.ToChar(receivedBytes[i]);
-                    }
-
-                    // Print message to debug console
-                    Debug.WriteLine(incomingMessage);
-                    // Add the peer to LstView_Peers
-                    LstView_Peers.Items.Add(incomingMessage);
+                    dataBytes = peerReceiver.Receive(ref listenEP);
+                    incomingMessage = Encoding.ASCII.GetString(dataBytes, 0, dataBytes.Length);
+                    Debug.WriteLine("Received message: " + incomingMessage);
+                    AddListviewItem(incomingMessage);
                 }
             }
-            catch (Exception e)
+            catch(Exception ex)
             {
-                Console.WriteLine(e.ToString());
+                Debug.WriteLine(ex.ToString());
+                MessageBox.Show(ex.ToString());
+                peerReceiver.Close();
             }
+        }
+
+        // This will allow the UdpListener thread to access the main forms listview element
+        private void AddListviewItem(string item)
+        {
+            LstView_Peers.Items.Add(item);
         }
 
 
