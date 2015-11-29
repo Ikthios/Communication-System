@@ -12,6 +12,7 @@ namespace PeerInterface
     {
         // Global variables
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        Socket sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         UdpClient peerReceiver;
         IPEndPoint hostEP, listenEP;
         // Create sender and listener threads
@@ -26,6 +27,8 @@ namespace PeerInterface
             // Show peer address to user
             Txt_Address.Text = GetIpAddress();
             Txt_LoginServAddress.Text = "10.134.172.46";
+
+            Thread.Sleep(3000);
 
             sendThread = new Thread(new ThreadStart(UdpSender));
             listenThread = new Thread(new ThreadStart(UdpListener));
@@ -233,22 +236,30 @@ namespace PeerInterface
             string username = Txt_Username.Text;
             //string message = username + "," + GetIpAddress();
             string message = "username," + GetIpAddress();
+            byte[] byteMessage = Encoding.ASCII.GetBytes(message);
 
             hostEP = new IPEndPoint(IPAddress.Broadcast, 6500);
 
             // Loop the broadcast signal
             while (true)
             {
-                socket.Connect(hostEP);
-                socket.Send(Encoding.ASCII.GetBytes(message));
-                Thread.Sleep(5000);
+                try
+                {
+                    socket.Connect(hostEP);
+                    socket.Send(Encoding.ASCII.GetBytes(message));
+                    Thread.Sleep(5000);
+                }
+                catch(Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
             }
         }
 
         // This will listen to the network for peer information
         private void UdpListener()
         {
-            peerReceiver = new UdpClient();
+            peerReceiver = new UdpClient(6500);
             listenEP = new IPEndPoint(IPAddress.Any, 6500);
 
             // Create a byte array to hold the incoming data
@@ -258,17 +269,18 @@ namespace PeerInterface
             try
             {
                 // Listen for other peers
-                peerReceiver.Client.Bind(listenEP);
-                peerReceiver.Receive(ref listenEP);
+                //peerReceiver.Client.Bind(listenEP);
+                //peerReceiver.Receive(ref listenEP);
 
                 while (true)
                 {
                     // Receive the incoming byte array over the server socket
-                    int receivedSize = socket.Receive(receivedBytes);
+                    //int receivedSize = socket.Receive(receivedBytes);
+                    receivedBytes = peerReceiver.Receive(ref listenEP);
 
-                    for (int i = 0; i < receivedSize; i++)
+                    for (int i = 0; i < receivedBytes.Length; i++)
                     {
-                        incomingMessage += receivedBytes[i];
+                        incomingMessage += Convert.ToChar(receivedBytes[i]);
                     }
 
                     // Print message to debug console
