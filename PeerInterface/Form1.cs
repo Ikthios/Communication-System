@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -12,12 +13,43 @@ namespace PeerInterface
     {
         // Global variables
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        Socket sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        //Socket sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         UdpClient peerReceiver;
         IPEndPoint hostEP, listenEP;
         // Create sender and listener threads
         Thread sendThread;
         Thread listenThread;
+
+        // Used for gathering peer information from the network
+        private string peerString;
+        private void setPeerString(string item)
+        {
+            peerString = item;
+        }
+        private string getPeerString()
+        {
+            return peerString;
+        }
+        // End peer info gathering section
+
+        // Used for storing the server IP address
+        private string serverAddress;
+        private void setServerAddress(string item)
+        {
+            serverAddress = item;
+        }
+        private string getServerAddress()
+        {
+            return serverAddress;
+        }
+        // End server IP storage section
+        
+        private delegate void AddListItem();
+        private AddListItem myDelegate;
+
+        private List<string> peerStringList = new List<string>();
 
         public Form1()
         {
@@ -26,7 +58,8 @@ namespace PeerInterface
 
             // Show peer address to user
             Txt_Address.Text = GetIpAddress();
-            Txt_LoginServAddress.Text = "10.134.172.46";
+            setServerAddress("10.134.172.46");
+            Txt_LoginServAddress.Text = getServerAddress();
 
             Thread.Sleep(3000);
 
@@ -35,6 +68,9 @@ namespace PeerInterface
             // Start sender and listener threads
             sendThread.Start();
             listenThread.Start();
+
+            // Set the delegate
+            myDelegate = new AddListItem(AddListItemMethod);
         }
 
 
@@ -51,7 +87,6 @@ namespace PeerInterface
 
         private void Register()
         {
-            Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint regEP = new IPEndPoint(IPAddress.Parse(Txt_RegServAddr.Text), 7000);
 
             try
@@ -87,27 +122,41 @@ namespace PeerInterface
 
 
         /*
+        This is the friend request feature of the peer interface. It will allow a user
+        to send a friend request to the server, which will update the peer with a
+        frient request notification.
+        */
+        private void Btn_FriendRequest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                IPEndPoint friendEP = new IPEndPoint(IPAddress.Parse(Txt_RegServAddr.Text), 8000);
+                string friend = LstView_Peers.SelectedItems.ToString();
+                string friendRequest = "ADD," + friend;
+                friendSocket.Connect(friendEP);
+                friendSocket.Send(Encoding.ASCII.GetBytes(friendRequest));
+
+                byte[] buffer = new byte[1500];
+                string dataString = "";
+                friendSocket.Receive(buffer);
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(buffer[i]);
+                }
+                Txt_FriendSuccess.Text = dataString;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+        /*
         This is the login feature for the peer interface. It will start a new
         thread which will attempt to connect to the login server and retreive
         its' information.
         */
         private void Btn_Connect_Click(object sender, EventArgs e)
         {
-            /*
-            sendThread = new Thread(new ThreadStart(UdpSender));
-            listenThread = new Thread(new ThreadStart(UdpListener));
-
-            if (!Txt_Username.Text.Equals(""))
-            {
-                // Start sender and listener threads
-                sendThread.Start();
-                listenThread.Start();
-            }
-            else
-            {
-                MessageBox.Show("Username required.");
-            }*/
-
             //Thread loginThread = new Thread(new ThreadStart(Login));
             //loginThread.Start();
 
@@ -234,7 +283,6 @@ namespace PeerInterface
         private void UdpSender()
         {
             string username = Txt_Username.Text;
-            //string message = username + "," + GetIpAddress();
             string message = "username," + GetIpAddress();
             byte[] byteMessage = Encoding.ASCII.GetBytes(message);
             hostEP = new IPEndPoint(IPAddress.Broadcast, 6500);
@@ -273,7 +321,8 @@ namespace PeerInterface
                     dataBytes = peerReceiver.Receive(ref listenEP);
                     incomingMessage = Encoding.ASCII.GetString(dataBytes, 0, dataBytes.Length);
                     Debug.WriteLine("Received message: " + incomingMessage);
-                    AddListviewItem(incomingMessage);
+                    setPeerString(incomingMessage);
+                    Invoke(myDelegate);
                 }
             }
             catch(Exception ex)
@@ -285,10 +334,30 @@ namespace PeerInterface
         }
 
         // This will allow the UdpListener thread to access the main forms listview element
-        private void AddListviewItem(string item)
+        private void AddListItemMethod()
         {
-            LstView_Peers.Items.Add(item);
+            int count = 0;
+            string peerString = getPeerString();
+
+            foreach(string element in peerStringList)
+            {
+                if (element.Equals(peerString))
+                {
+                    count++;
+                }
+            }
+            
+            if (count == 0)
+            {
+                peerStringList.Add(peerString);
+                LstView_Peers.Items.Add(peerString);
+            }
+            else
+            {
+                Debug.WriteLine(peerString + " already in peerStringList.");
+            }
         }
+
 
 
         // Get peer IP address

@@ -71,6 +71,9 @@
             this.Btn_Connect = new System.Windows.Forms.Button();
             this.Txt_Address = new System.Windows.Forms.TextBox();
             this.commPage = new System.Windows.Forms.TabPage();
+            this.Btn_FriendRequest = new System.Windows.Forms.Button();
+            this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -79,6 +82,7 @@
             this.tabControl1.SuspendLayout();
             this.registerPage.SuspendLayout();
             this.loginPage.SuspendLayout();
+            this.commPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // Txt_Username
@@ -512,6 +516,9 @@
             // 
             // commPage
             // 
+            this.commPage.Controls.Add(this.groupBox1);
+            this.commPage.Controls.Add(this.Txt_FriendSuccess);
+            this.commPage.Controls.Add(this.Btn_FriendRequest);
             this.commPage.Location = new System.Drawing.Point(4, 22);
             this.commPage.Name = "commPage";
             this.commPage.Padding = new System.Windows.Forms.Padding(3);
@@ -519,6 +526,34 @@
             this.commPage.TabIndex = 1;
             this.commPage.Text = "Communicate";
             this.commPage.UseVisualStyleBackColor = true;
+            // 
+            // Btn_FriendRequest
+            // 
+            this.Btn_FriendRequest.BackColor = System.Drawing.SystemColors.Control;
+            this.Btn_FriendRequest.Location = new System.Drawing.Point(6, 6);
+            this.Btn_FriendRequest.Name = "Btn_FriendRequest";
+            this.Btn_FriendRequest.Size = new System.Drawing.Size(132, 23);
+            this.Btn_FriendRequest.TabIndex = 0;
+            this.Btn_FriendRequest.Text = "Send Friend Request";
+            this.Btn_FriendRequest.UseVisualStyleBackColor = false;
+            this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
+            // 
+            // Txt_FriendSuccess
+            // 
+            this.Txt_FriendSuccess.Location = new System.Drawing.Point(6, 35);
+            this.Txt_FriendSuccess.Name = "Txt_FriendSuccess";
+            this.Txt_FriendSuccess.ReadOnly = true;
+            this.Txt_FriendSuccess.Size = new System.Drawing.Size(132, 20);
+            this.Txt_FriendSuccess.TabIndex = 1;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(6, 61);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(344, 100);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Voice Client";
             // 
             // Form1
             // 
@@ -538,6 +573,8 @@
             this.registerPage.PerformLayout();
             this.loginPage.ResumeLayout(false);
             this.loginPage.PerformLayout();
+            this.commPage.ResumeLayout(false);
+            this.commPage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -587,6 +624,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox Txt_LoginServAddress;
         private System.Windows.Forms.TextBox Txt_AccountInfo;
+        private System.Windows.Forms.Button Btn_FriendRequest;
+        private System.Windows.Forms.TextBox Txt_FriendSuccess;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 
