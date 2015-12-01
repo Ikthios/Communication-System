@@ -122,7 +122,7 @@ namespace Server
             Thread friendsList = new Thread(temp.GetFriendsListener);
             friendsList.Start();
 
-            ActiveUserListener active = new ActiveUserListener(1000);
+            ActiveUserListener active = new ActiveUserListener(500);
             active.StartUDPListener();
 
             DatabaseWorker worker = new DatabaseWorker();

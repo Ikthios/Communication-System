@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -11,9 +12,12 @@ namespace Server
 {
     public class ActiveUserListener
     {
+        private static Semaphore userSemaphore;
         int receivingPort;
         private static System.Timers.Timer checkTimer;
-        static List<User> activeUsers = new List<User>();
+        static HashSet<String> usernames = new HashSet<String>();
+        static HashSet<String> ips = new HashSet<String>();
+        static List<User> users = new List<User>();
 
         public ActiveUserListener(int newPort)
         {
@@ -22,6 +26,7 @@ namespace Server
 
         public void StartUDPListener()
         {
+            userSemaphore = new Semaphore(1, 1);
             Thread receivingThread = new Thread(messageReceiver);
             receivingThread.Start();
             SetTimer();
@@ -40,10 +45,12 @@ namespace Server
                     receive_byte_array = activeListener.Receive(ref groupEP);
                     received_data = Encoding.ASCII.GetString(receive_byte_array, 0, receive_byte_array.Length);
                     string[] holster = received_data.Split(',');
-                    User temp = new User();
-                    temp.Username = holster[0];
-                    temp.IP = holster[1];
-                    activeUsers.Add(temp);
+                    string username = holster[0];
+                    string ip = holster[1];
+                    userSemaphore.WaitOne();
+                    usernames.Add(username);
+                    ips.Add(ip);
+                    userSemaphore.Release();
                 }
             }
             catch (Exception e)
@@ -55,7 +62,7 @@ namespace Server
         private static void SetTimer()
         {
             // Create a timer with a twenty second interval.
-            checkTimer = new System.Timers.Timer(20000);
+            checkTimer = new System.Timers.Timer(2000);
             // Hook up the Elapsed event for the timer. 
             checkTimer.Elapsed += OnTimedEvent;
             checkTimer.AutoReset = true;
@@ -66,21 +73,45 @@ namespace Server
         {
             Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}",
                               e.SignalTime);
-            foreach (var user in activeUsers)
+
+            string[] localNames = usernames.ToArray();
+            string[] localIPS = ips.ToArray();
+
+            users.Clear();
+
+            for (int i = 0; i < localNames.Length; i++)
+            {
+                User temp = new User();
+                temp.Username = localNames[i];
+                temp.IP = localIPS[i];
+                users.Add(temp);
+            }
+
+            foreach (var user in users)
             {
                 SendActiveList(user);
             }
-            activeUsers.Clear();
+            users.Clear();
         }
 
         private static void SendActiveList(User destinationUser)
         {
+            userSemaphore.WaitOne();
             Socket sending_socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             string message;
-            foreach (var user in activeUsers)
+            string[] localNames = usernames.ToArray();
+            string[] localIPS = ips.ToArray();
+
+            foreach (var user in users)
             {
                 message = "";
-                message = user.Username + ',' + user.IP;
+                for(int i = 0; i < localNames.Length; i++)
+                {
+                    message += localNames[i];
+                    message += ',';
+                    message += localIPS[i];
+                    message += ',';
+                }
                 
                 IPAddress send_to_address = IPAddress.Parse(destinationUser.IP);
                 IPEndPoint sending_end_point = new IPEndPoint(send_to_address, 1000);
@@ -96,6 +127,7 @@ namespace Server
 
                 }
             }
+            userSemaphore.Release();
         }
     }
 

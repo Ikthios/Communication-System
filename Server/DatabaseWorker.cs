@@ -52,6 +52,16 @@ namespace Server
 
                     command.ExecuteNonQuery();
 
+                    command = new SqlCommand("UPDATE Friends SET UserIP = @IP WHERE Username = @Username", connection);
+
+                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Username"].Value = username;
+
+                    command.Parameters.Add("@IP", SqlDbType.NVarChar, 50);
+                    command.Parameters["@IP"].Value = ip;
+
+                    command.ExecuteNonQuery();
+
                     connection.Close();
                 }
             }
@@ -114,8 +124,8 @@ namespace Server
                 using (SqlConnection connection = new SqlConnection(conString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("INSERT INTO Friends (Username, FriendUsername, FriendIP) VALUES "
-                        + "(@Username, @FriendUsername, @FriendIP)", connection);
+                    SqlCommand command = new SqlCommand("INSERT INTO Friends (Username, FriendUsername, FriendIP, UserIP) VALUES "
+                        + "(@Username, @FriendUsername, @FriendIP, @UserIP)", connection);
 
                     command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
                     command.Parameters["@Username"].Value = user.Username;
@@ -125,6 +135,9 @@ namespace Server
 
                     command.Parameters.Add("@FriendIP", SqlDbType.NVarChar, 50);
                     command.Parameters["@FriendIP"].Value = friend.IP;
+
+                    command.Parameters.Add("@UserIP", SqlDbType.NVarChar, 50);
+                    command.Parameters["@UserIP"].Value = user.IP;
 
                     command.ExecuteNonQuery();
                     connection.Close();
@@ -396,7 +409,7 @@ namespace Server
                 using (SqlConnection connection = new SqlConnection(conString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("DELETE FROM Friends WHERE Username = @FriendUsername AND @FriendUsername AND FriendUsername = @Username", connection);
+                    SqlCommand command = new SqlCommand("DELETE FROM Friends WHERE Username = @FriendUsername AND FriendUsername = @Username", connection);
 
                     command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
                     command.Parameters["@Username"].Value = user.Username;
@@ -423,6 +436,31 @@ namespace Server
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand("UPDATE Friends SET Accepted = 1 WHERE Username = @FriendUsername AND FriendUsername = @Username", connection);
+
+                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                    command.Parameters["@Username"].Value = user.Username;
+
+                    command.Parameters.Add("@FriendUsername", SqlDbType.NVarChar, 50);
+                    command.Parameters["@FriendUsername"].Value = friend.Username;
+
+                    command.ExecuteNonQuery();
+
+                    connection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            AddFriend(user, friend);
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(conString))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("UPDATE Friends SET Accepted = 1 WHERE Username = @Username AND FriendUsername = @FriendUsername", connection);
 
                     command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
                     command.Parameters["@Username"].Value = user.Username;

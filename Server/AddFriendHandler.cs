@@ -41,10 +41,11 @@ namespace Server
             {
                 User user = new User();
                 user.Username = package[1];
+                user.IP = package[2];
 
                 User friend = new User();
-                friend.Username = package[2];
-                friend.IP = package[3];
+                friend.Username = package[3];
+                friend.IP = package[4];
 
                 bool areFriends = checkIfFriends(user.Username, friend.Username);
 
@@ -59,6 +60,11 @@ namespace Server
                 else
                 {
                     worker.AddFriend(user, friend);
+                    string info = "Friend added.";
+                    byte[] message = encoding.GetBytes(info);
+
+                    byteCount = clientSocket.Send(message);
+                    clientSocket.Close();
                 }
             }
 
@@ -66,9 +72,11 @@ namespace Server
             {
                 User user = new User();
                 user.Username = package[1];
+                user.IP = package[2];
 
                 User friend = new User();
-                friend.Username = package[2];
+                friend.Username = package[3];
+                friend.IP = package[4];
 
                 worker.setToAccept(user, friend);
 

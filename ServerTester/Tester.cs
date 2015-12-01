@@ -28,7 +28,7 @@ namespace ServerTester
             server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 7000);
             regSocket.Connect(server);
 
-            string info = "Username,Password,,,,,,,";
+            string info = "Username,Password,,,,,1990,10,10,,";
 
             regSocket.Send(Encoding.ASCII.GetBytes(info));
 
@@ -40,7 +40,7 @@ namespace ServerTester
             server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 6000);
             regSocket.Connect(server);
 
-            string info = "Username,Password";
+            string info = "Username,Password,134.129.51.167,";
 
             regSocket.Send(Encoding.ASCII.GetBytes(info));
 
@@ -52,7 +52,7 @@ namespace ServerTester
             server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 8000);
             regSocket.Connect(server);
 
-            string info = "ADD,Username,FriendUsername,100.000.000.000";
+            string info = "ADD,Username,100,FriendUsername,100.000.000.000";
 
             regSocket.Send(Encoding.ASCII.GetBytes(info));
 
@@ -64,7 +64,7 @@ namespace ServerTester
             server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 8000);
             regSocket.Connect(server);
 
-            string info = "ACCEPT,Username,FriendUsername";
+            string info = "ACCEPT,FriendUsername,1000,Username,100,";
 
             regSocket.Send(Encoding.ASCII.GetBytes(info));
 
@@ -76,7 +76,7 @@ namespace ServerTester
             server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 8000);
             regSocket.Connect(server);
 
-            string info = "REJECT,Username,FriendUsername";
+            string info = "REJECT,FriendUsername,Username,";
 
             regSocket.Send(Encoding.ASCII.GetBytes(info));
 
@@ -98,9 +98,9 @@ namespace ServerTester
         //Thread me!
         public void pingActive()
         {
-            server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 1000);
+            server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 500);
 
-            string info = "Username,100.100.100.100";
+            string info = "Username,134.129.51.167";
 
             while (true)
             {
@@ -111,13 +111,16 @@ namespace ServerTester
         //Thread me!
         public void receiveActivePing()
         {
-            string received_data;
-            byte[] receive_byte_array;
+            while (true)
+            {
+                string received_data;
+                byte[] receive_byte_array;
 
-            receive_byte_array = activeListener.Receive(ref groupEP);
-            received_data = Encoding.ASCII.GetString(receive_byte_array, 0, receive_byte_array.Length);
+                receive_byte_array = activeListener.Receive(ref groupEP);
+                received_data = Encoding.ASCII.GetString(receive_byte_array, 0, receive_byte_array.Length);
 
-            Console.WriteLine(received_data);
+                Console.WriteLine(received_data);
+            }
         }
 
 
@@ -143,6 +146,9 @@ namespace ServerTester
 
             Thread receive = new Thread(temp.receiveActivePing);
             receive.Start();
+
+            temp.AddFriendAdd();
+            temp.AddFriendAccept();
         }
     }
 }
