@@ -50,7 +50,7 @@ namespace Server
 
                 if(areFriends)
                 {
-                    string info = "Already added by friend.";
+                    string info = "Already added by friend.  Accept invite when prompted.";
                     byte[] message = encoding.GetBytes(info);
 
                     byteCount = clientSocket.Send(message);
@@ -100,15 +100,16 @@ namespace Server
         public bool checkIfFriends(string userName, string FriendUsername)
         {
             bool areFriends = false;
-            List<string> friends = worker.getFriendsList(userName);
+            List<string> friends = worker.getFriendsList(FriendUsername);
 
             foreach(string f in friends)
             {
-                if(f.Equals(FriendUsername))
+                if(f.Equals(userName))
                 {
                     areFriends = true;
                 }
             }
+
             return areFriends;
         }
     }

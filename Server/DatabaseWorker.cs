@@ -223,7 +223,7 @@ namespace Server
                 using (SqlConnection connection = new SqlConnection(conString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT Username, FriendUsername, FriendIP FROM Users WHERE Accepted = 0", connection);
+                    SqlCommand command = new SqlCommand("SELECT Username, FriendUsername, FriendIP FROM Friends WHERE Accepted = 0", connection);
 
                     SqlDataReader reader = command.ExecuteReader();
 
@@ -233,7 +233,7 @@ namespace Server
                         {
                             PendingRequest temp = new PendingRequest();
                             temp.Username = reader[0].ToString();
-                            temp.Username = reader[1].ToString();
+                            temp.FriendUsername = reader[1].ToString();
                             temp.IP = reader[2].ToString();
                             values.Add(temp);
                         }
