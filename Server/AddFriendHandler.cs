@@ -62,7 +62,7 @@ namespace Server
                 }
             }
 
-            if(package[1] == "ACCEPT")
+            if(package[0] == "ACCEPT")
             {
                 User user = new User();
                 user.Username = package[1];
@@ -79,7 +79,7 @@ namespace Server
                 clientSocket.Close();
             }
 
-            if(package[1] == "REJECT")
+            if(package[0] == "REJECT")
             {
                 User user = new User();
                 user.Username = package[1];

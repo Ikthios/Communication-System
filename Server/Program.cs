@@ -116,12 +116,16 @@ namespace Server
             Thread login = new Thread(temp.LoginListener);
             login.Start();
 
+            Thread addFriend = new Thread(temp.AddFriendListener);
+            addFriend.Start();
+
             Thread friendsList = new Thread(temp.GetFriendsListener);
             friendsList.Start();
 
             ActiveUserListener active = new ActiveUserListener(1000);
             active.StartUDPListener();
 
-            DatabaseWorker worker = new DatabaseWorker();       }
+            DatabaseWorker worker = new DatabaseWorker();
+        }
     }
 } 
