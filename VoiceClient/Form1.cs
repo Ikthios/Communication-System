@@ -28,8 +28,20 @@ namespace VoiceClient
             GetInputDevices();
 
             // Start the listener on form load
-            Thread receivingThread = new Thread(Listener);
-            receivingThread.Start();
+            // receivingThread = new Thread(Listener);
+            // receivingThread.Start();
+            Thread AudioConnectListener = new Thread(AudioConnect);
+            AudioConnectListener.Start();
+        }
+
+        private void AudioConnect()
+        {
+            UdpClient audioConnect = new UdpClient();
+            IPEndPoint audioEP = new IPEndPoint(IPAddress.Any, 6001);
+            while (true)
+            {
+                audioConnect.Receive(ref audioEP);
+            }
         }
 
         // Global variables
@@ -78,7 +90,6 @@ namespace VoiceClient
             Btn_Start.Enabled = true;
 
             udpSender.Close();
-            //udpReceiver.Close();
 
             if (waveout != null)
             {
@@ -130,11 +141,6 @@ namespace VoiceClient
             sourcestream.StartRecording();
 
             udpSender = new UdpClient();
-            //udpReceiver = new UdpClient();
-
-            //udpReceiver.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            //udpReceiver.Client.Bind(endPoint);
-
             udpSender.Connect(endPoint);
 
             waveout = new WaveOut();
@@ -143,8 +149,9 @@ namespace VoiceClient
             waveout.Init(waveProvider);
             waveout.Play();
 
-            //var state = new ListenerState { EndPoint = endPoint };
-            //ThreadPool.QueueUserWorkItem(Listener, state);
+            // Start the listener on form load
+            Thread receivingThread = new Thread(Listener);
+            receivingThread.Start();
         }
 
         private void sourcestream_DataAvailable(object sender, WaveInEventArgs e)
@@ -160,18 +167,10 @@ namespace VoiceClient
             }
         }
 
-        
-        class ListenerState
+        private void Listener()
         {
-            public IPEndPoint EndPoint { get; set; }
-        }
-
-        private void Listener(/*object state*/)
-        {
-            //var ListenerState = (ListenerState)state;
-            //var endPoint = ListenerState.EndPoint;
-
             IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6000);
+
             try
             {
                 udpReceiver = new UdpClient();

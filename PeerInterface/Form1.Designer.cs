@@ -649,7 +649,7 @@
             this.Btn_Stop.Name = "Btn_Stop";
             this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
             this.Btn_Stop.TabIndex = 20;
-            this.Btn_Stop.Text = "Stop";
+            this.Btn_Stop.Text = "Disconnect";
             this.Btn_Stop.UseVisualStyleBackColor = true;
             this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
             // 
@@ -659,7 +659,7 @@
             this.Btn_Start.Name = "Btn_Start";
             this.Btn_Start.Size = new System.Drawing.Size(128, 23);
             this.Btn_Start.TabIndex = 19;
-            this.Btn_Start.Text = "Start";
+            this.Btn_Start.Text = "Call Peer";
             this.Btn_Start.UseVisualStyleBackColor = true;
             this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
             // 

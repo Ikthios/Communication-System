@@ -179,63 +179,24 @@ namespace PeerInterface
         thread which will attempt to connect to the login server and retreive
         its' information.
         */
+        private bool loggedIn;
         private void Btn_Connect_Click(object sender, EventArgs e)
         {
-            //Thread loginThread = new Thread(new ThreadStart(Login));
-            //loginThread.Start();
+            Thread loginThread = new Thread(new ThreadStart(Login));
+            Thread friendThread = new Thread(new ThreadStart(GetFriendList));
+            loginThread.Start();
 
-            string username = Txt_Username.Text;
-            string password = Txt_Password.Text;
-            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
-            string loginMessage = username + ',' + password + ',' + GetIpAddress() + ',';
-
-            try
+            while (true)
             {
-                // Login and get user information
-                loginSocket.Connect(loginEP);
-                loginSocket.Send(Encoding.ASCII.GetBytes(loginMessage));
-
-                byte[] buffer = new byte[1500];
-                string dataString = "";
-                loginSocket.Receive(buffer);
-                for (int i = 0; i < buffer.Length; i++)
+                if (loggedIn)
                 {
-                    dataString += Convert.ToChar(buffer[i]);
+                    friendThread.Start();
+                    break;
                 }
-                string[] tokens = dataString.Split(',');
-                if (tokens[0].Equals("SUCCESS"))
-                    Btn_Connect.Enabled = false;
-                Txt_AccountInfo.Text = dataString;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-            try
-            {
-                Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                IPEndPoint friendEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 9000);
-                friendSocket.Connect(friendEP);
-                // Send username and get friend listing
-                friendSocket.Send(Encoding.ASCII.GetBytes(username));
-                byte[] friendBuffer = new byte[1500];
-                string dataString = "";
-                friendSocket.Receive(friendBuffer);
-                for (int i = 0; i < friendBuffer.Length; i++)
+                else
                 {
-                    dataString += Convert.ToChar(friendBuffer[i]);
+                    Debug.WriteLine("User not logged in yet.");
                 }
-                string[] tokens = dataString.Split(',');
-                foreach (var friend in tokens)
-                {
-                    LstView_Friends.Items.Add(friend);
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -264,34 +225,42 @@ namespace PeerInterface
                 if (tokens[0].Equals("SUCCESS"))
                     Btn_Connect.Enabled = false;
                 Txt_AccountInfo.Text = dataString;
+
+                loggedIn = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
         }
 
-
         private void GetFriendList()
         {
             string username = Txt_Username.Text;
             string password = Txt_Password.Text;
-            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
-
-            // Send username and get friend listing
-            loginSocket.Send(Encoding.ASCII.GetBytes(username));
-            byte[] friendBuffer = new byte[1500];
-            string dataString = "";
-            loginSocket.Receive(friendBuffer);
-            for (int i = 0; i < friendBuffer.Length; i++)
+            try
             {
-                dataString += Convert.ToChar(friendBuffer[i]);
+                Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint friendEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 9000);
+                friendSocket.Connect(friendEP);
+                // Send username and get friend listing
+                friendSocket.Send(Encoding.ASCII.GetBytes(username));
+                byte[] friendBuffer = new byte[1500];
+                string dataString = "";
+                friendSocket.Receive(friendBuffer);
+                for (int i = 0; i < friendBuffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(friendBuffer[i]);
+                }
+                string[] tokens = dataString.Split(',');
+                foreach (var friend in tokens)
+                {
+                    LstView_Friends.Items.Add(friend);
+                }
             }
-            string[] tokens = dataString.Split(',');
-            foreach (var friend in tokens)
+            catch (Exception ex)
             {
-                LstView_Friends.Items.Add(friend);
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -407,12 +376,7 @@ namespace PeerInterface
         the feature has been confirmed to
         work nicely.
         */
-        // Global variables
-        UdpClient udpSender;
-        UdpClient udpReceiver;
-        WaveIn sourcestream = null;
-        WaveOut waveout = null;
-        BufferedWaveProvider waveProvider = null;
+        Voice voice = new Voice();
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
@@ -427,22 +391,7 @@ namespace PeerInterface
                 Btn_Start.Enabled = false;
                 Btn_Stop.Enabled = true;
 
-                try
-                {
-                    // Get the endpoint
-                    string peerAddress = LstView_Peers.SelectedItems.ToString();
-                    string[] tokens = peerAddress.Split(',');
-                    IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(tokens[1].ToString()),
-                                                                int.Parse(Txt_ServPort.Text));
-                    int bitRate = int.Parse(CmbBox_SampleRate.Text);
-                    int bitDepth = int.Parse(CmbBox_BitDepth.Text);
-                    // Connect to the peer
-                    Connect(audioEP, LstView_Devices.SelectedItems[0].Index, bitRate, bitDepth);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.ToString());
-                }
+                voice.Start(LstView_Peers.SelectedItems.ToString(), Txt_ServPort.Text, CmbBox_SampleRate.Text, CmbBox_BitDepth.Text, LstView_Devices.SelectedItems[0].Index);
             }
         }
 
@@ -451,21 +400,7 @@ namespace PeerInterface
             Btn_Stop.Enabled = false;
             Btn_Start.Enabled = true;
 
-            udpSender.Close();
-            udpReceiver.Close();
-
-            if (waveout != null)
-            {
-                waveout.Stop();
-                waveout.Dispose();
-                waveout = null;
-            }
-            if (sourcestream != null)
-            {
-                sourcestream.StopRecording();
-                sourcestream.Dispose();
-                sourcestream = null;
-            }
+            voice.Stop();
         }
 
         private void Btn_Exit_Click(object sender, EventArgs e)
@@ -491,59 +426,6 @@ namespace PeerInterface
                 ListViewItem item = new ListViewItem(device.ProductName);
                 item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.Channels.ToString()));
                 LstView_Devices.Items.Add(item);
-            }
-        }
-
-        private void Connect(IPEndPoint audioEP, int inputDeviceNumber, int bitRate, int bitDepth)
-        {
-            sourcestream = new WaveIn();
-            sourcestream.BufferMilliseconds = 50;
-            sourcestream.DeviceNumber = inputDeviceNumber;
-            sourcestream.WaveFormat = new WaveFormat(bitRate, bitDepth, WaveIn.GetCapabilities(inputDeviceNumber).Channels);
-            sourcestream.DataAvailable += sourcestream_DataAvailable;
-            sourcestream.StartRecording();
-
-            udpSender = new UdpClient();
-
-            udpSender.Connect(audioEP);
-
-            waveout = new WaveOut();
-            waveProvider = new BufferedWaveProvider(sourcestream.WaveFormat);
-
-            waveout.Init(waveProvider);
-            waveout.Play();
-        }
-
-        private void sourcestream_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            try
-            {
-                byte[] buffer = (e.Buffer);
-                udpSender.Send(buffer, buffer.Length);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-            }
-        }
-
-        private void AudioListener()
-        {
-            IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6000);
-            try
-            {
-                udpReceiver = new UdpClient();
-                udpReceiver.Client.Bind(listeningEP);
-
-                while (true)
-                {
-                    byte[] buffer = udpReceiver.Receive(ref listeningEP);
-                    waveProvider.AddSamples(buffer, 0, buffer.Length);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
             }
         }
     }
