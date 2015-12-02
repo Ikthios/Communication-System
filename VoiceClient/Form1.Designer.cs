@@ -29,9 +29,14 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.LstView_Devices = new System.Windows.Forms.ListView();
             this.DeviceColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.ChannelColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.LstView_Friends = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label4 = new System.Windows.Forms.Label();
+            this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,11 +46,6 @@
             this.Btn_Exit = new System.Windows.Forms.Button();
             this.Btn_Stop = new System.Windows.Forms.Button();
             this.Btn_Start = new System.Windows.Forms.Button();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.LstView_Friends = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label4 = new System.Windows.Forms.Label();
-            this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -83,6 +83,24 @@
             this.splitContainer1.SplitterDistance = 310;
             this.splitContainer1.TabIndex = 0;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.LstView_Devices);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.LstView_Friends);
+            this.splitContainer2.Size = new System.Drawing.Size(310, 261);
+            this.splitContainer2.SplitterDistance = 130;
+            this.splitContainer2.TabIndex = 0;
+            // 
             // LstView_Devices
             // 
             this.LstView_Devices.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -104,6 +122,44 @@
             // ChannelColumn
             // 
             this.ChannelColumn.Text = "Channel";
+            // 
+            // LstView_Friends
+            // 
+            this.LstView_Friends.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.LstView_Friends.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LstView_Friends.Location = new System.Drawing.Point(0, 0);
+            this.LstView_Friends.Name = "LstView_Friends";
+            this.LstView_Friends.Size = new System.Drawing.Size(310, 127);
+            this.LstView_Friends.TabIndex = 0;
+            this.LstView_Friends.UseCompatibleStateImageBehavior = false;
+            this.LstView_Friends.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Friends";
+            this.columnHeader1.Width = 120;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label4.Location = new System.Drawing.Point(137, 42);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(53, 15);
+            this.label4.TabIndex = 18;
+            this.label4.Text = "Bit Depth";
+            // 
+            // CmbBox_BitDepth
+            // 
+            this.CmbBox_BitDepth.FormattingEnabled = true;
+            this.CmbBox_BitDepth.Items.AddRange(new object[] {
+            "16",
+            "24"});
+            this.CmbBox_BitDepth.Location = new System.Drawing.Point(3, 39);
+            this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
+            this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
+            this.CmbBox_BitDepth.TabIndex = 17;
             // 
             // label3
             // 
@@ -139,7 +195,6 @@
             // 
             this.Txt_ServAddress.Location = new System.Drawing.Point(3, 203);
             this.Txt_ServAddress.Name = "Txt_ServAddress";
-            this.Txt_ServAddress.ReadOnly = true;
             this.Txt_ServAddress.Size = new System.Drawing.Size(128, 20);
             this.Txt_ServAddress.TabIndex = 13;
             // 
@@ -147,7 +202,6 @@
             // 
             this.Txt_ServPort.Location = new System.Drawing.Point(3, 229);
             this.Txt_ServPort.Name = "Txt_ServPort";
-            this.Txt_ServPort.ReadOnly = true;
             this.Txt_ServPort.Size = new System.Drawing.Size(128, 20);
             this.Txt_ServPort.TabIndex = 12;
             // 
@@ -201,62 +255,6 @@
             this.Btn_Start.Text = "Start";
             this.Btn_Start.UseVisualStyleBackColor = true;
             this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click_1);
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.LstView_Devices);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.LstView_Friends);
-            this.splitContainer2.Size = new System.Drawing.Size(310, 261);
-            this.splitContainer2.SplitterDistance = 130;
-            this.splitContainer2.TabIndex = 0;
-            // 
-            // LstView_Friends
-            // 
-            this.LstView_Friends.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
-            this.LstView_Friends.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LstView_Friends.Location = new System.Drawing.Point(0, 0);
-            this.LstView_Friends.Name = "LstView_Friends";
-            this.LstView_Friends.Size = new System.Drawing.Size(310, 127);
-            this.LstView_Friends.TabIndex = 0;
-            this.LstView_Friends.UseCompatibleStateImageBehavior = false;
-            this.LstView_Friends.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Friends";
-            this.columnHeader1.Width = 120;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label4.Location = new System.Drawing.Point(137, 42);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 15);
-            this.label4.TabIndex = 18;
-            this.label4.Text = "Bit Depth";
-            // 
-            // CmbBox_BitDepth
-            // 
-            this.CmbBox_BitDepth.FormattingEnabled = true;
-            this.CmbBox_BitDepth.Items.AddRange(new object[] {
-            "16",
-            "24"});
-            this.CmbBox_BitDepth.Location = new System.Drawing.Point(3, 39);
-            this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
-            this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
-            this.CmbBox_BitDepth.TabIndex = 17;
             // 
             // Form1
             // 

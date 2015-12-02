@@ -38,7 +38,7 @@ namespace VoiceClient
         UdpClient udpReceiver;
         WaveIn sourcestream = null;
         WaveOut waveout = null;
-        WaveInProvider waveIn = null;
+        //WaveInProvider waveIn = null;
         BufferedWaveProvider waveProvider = null;
         IPEndPoint endPoint;
 
@@ -78,7 +78,7 @@ namespace VoiceClient
             Btn_Start.Enabled = true;
 
             udpSender.Close();
-            udpReceiver.Close();
+            //udpReceiver.Close();
 
             if (waveout != null)
             {
@@ -130,10 +130,10 @@ namespace VoiceClient
             sourcestream.StartRecording();
 
             udpSender = new UdpClient();
-            udpReceiver = new UdpClient();
+            //udpReceiver = new UdpClient();
 
-            udpReceiver.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            udpReceiver.Client.Bind(endPoint);
+            //udpReceiver.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            //udpReceiver.Client.Bind(endPoint);
 
             udpSender.Connect(endPoint);
 
@@ -143,8 +143,8 @@ namespace VoiceClient
             waveout.Init(waveProvider);
             waveout.Play();
 
-            var state = new ListenerState { EndPoint = endPoint };
-            ThreadPool.QueueUserWorkItem(Listener, state);
+            //var state = new ListenerState { EndPoint = endPoint };
+            //ThreadPool.QueueUserWorkItem(Listener, state);
         }
 
         private void sourcestream_DataAvailable(object sender, WaveInEventArgs e)
@@ -166,16 +166,19 @@ namespace VoiceClient
             public IPEndPoint EndPoint { get; set; }
         }
 
-        private void Listener(object state)
+        private void Listener(/*object state*/)
         {
-            var ListenerState = (ListenerState)state;
+            //var ListenerState = (ListenerState)state;
             //var endPoint = ListenerState.EndPoint;
 
+            IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6000);
             try
             {
+                udpReceiver = new UdpClient();
+                udpReceiver.Client.Bind(listeningEP);
                 while (true)
                 {
-                    byte[] buffer = udpReceiver.Receive(ref endPoint);
+                    byte[] buffer = udpReceiver.Receive(ref listeningEP);
                     waveProvider.AddSamples(buffer, 0, buffer.Length);
                 }
             }

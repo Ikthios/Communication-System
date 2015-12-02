@@ -45,8 +45,8 @@ namespace PeerInterface
             GetInputDevices();
 
             // Start the listener on form load
-            Thread receivingThread = new Thread(Listener);
-            receivingThread.Start();
+            Thread audioThread = new Thread(AudioListener);
+            audioThread.Start();
             /*
             Stop audio section
             */
@@ -413,7 +413,6 @@ namespace PeerInterface
         WaveIn sourcestream = null;
         WaveOut waveout = null;
         BufferedWaveProvider waveProvider = null;
-        IPEndPoint audioEP;
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
@@ -431,12 +430,14 @@ namespace PeerInterface
                 try
                 {
                     // Get the endpoint
-                    audioEP = new IPEndPoint(IPAddress.Parse(Txt_ServAddress.Text),
+                    string peerAddress = LstView_Peers.SelectedItems.ToString();
+                    string[] tokens = peerAddress.Split(',');
+                    IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(tokens[1].ToString()),
                                                                 int.Parse(Txt_ServPort.Text));
                     int bitRate = int.Parse(CmbBox_SampleRate.Text);
                     int bitDepth = int.Parse(CmbBox_BitDepth.Text);
                     // Connect to the peer
-                    Connect(LstView_Devices.SelectedItems[0].Index, bitRate, bitDepth);
+                    Connect(audioEP, LstView_Devices.SelectedItems[0].Index, bitRate, bitDepth);
                 }
                 catch (Exception ex)
                 {
@@ -493,7 +494,7 @@ namespace PeerInterface
             }
         }
 
-        private void Connect(int inputDeviceNumber, int bitRate, int bitDepth)
+        private void Connect(IPEndPoint audioEP, int inputDeviceNumber, int bitRate, int bitDepth)
         {
             sourcestream = new WaveIn();
             sourcestream.BufferMilliseconds = 50;
@@ -503,10 +504,6 @@ namespace PeerInterface
             sourcestream.StartRecording();
 
             udpSender = new UdpClient();
-            udpReceiver = new UdpClient();
-
-            udpReceiver.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            udpReceiver.Client.Bind(audioEP);
 
             udpSender.Connect(audioEP);
 
@@ -515,9 +512,6 @@ namespace PeerInterface
 
             waveout.Init(waveProvider);
             waveout.Play();
-
-            var state = new ListenerState { EndPoint = audioEP };
-            ThreadPool.QueueUserWorkItem(Listener, state);
         }
 
         private void sourcestream_DataAvailable(object sender, WaveInEventArgs e)
@@ -533,22 +527,17 @@ namespace PeerInterface
             }
         }
 
-
-        class ListenerState
+        private void AudioListener()
         {
-            public IPEndPoint EndPoint { get; set; }
-        }
-
-        private void Listener(object state)
-        {
-            var ListenerState = (ListenerState)state;
-            //var endPoint = ListenerState.EndPoint;
-
+            IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6000);
             try
             {
+                udpReceiver = new UdpClient();
+                udpReceiver.Client.Bind(listeningEP);
+
                 while (true)
                 {
-                    byte[] buffer = udpReceiver.Receive(ref audioEP);
+                    byte[] buffer = udpReceiver.Receive(ref listeningEP);
                     waveProvider.AddSamples(buffer, 0, buffer.Length);
                 }
             }

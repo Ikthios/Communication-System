@@ -31,6 +31,9 @@
             this.Txt_Username = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.LstView_Devices = new System.Windows.Forms.ListView();
+            this.deviceColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.channelColumns = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.LstView_Peers = new System.Windows.Forms.ListView();
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.LstView_Requests = new System.Windows.Forms.ListView();
@@ -72,22 +75,19 @@
             this.Txt_Address = new System.Windows.Forms.TextBox();
             this.commPage = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
-            this.Btn_FriendRequest = new System.Windows.Forms.Button();
-            this.LstView_Devices = new System.Windows.Forms.ListView();
-            this.deviceColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.channelColumns = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label14 = new System.Windows.Forms.Label();
-            this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
-            this.Btn_Exit = new System.Windows.Forms.Button();
-            this.Btn_Stop = new System.Windows.Forms.Button();
-            this.Btn_Start = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.Txt_ServAddress = new System.Windows.Forms.TextBox();
             this.Txt_ServPort = new System.Windows.Forms.TextBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
+            this.Btn_Stop = new System.Windows.Forms.Button();
+            this.Btn_Start = new System.Windows.Forms.Button();
+            this.label15 = new System.Windows.Forms.Label();
+            this.Btn_Exit = new System.Windows.Forms.Button();
+            this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
+            this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
+            this.Btn_FriendRequest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -133,12 +133,35 @@
             this.splitContainer1.Panel1.Controls.Add(this.LstView_Friends);
             this.splitContainer1.Panel1MinSize = 200;
             // 
-            // 
+            // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel1);
             this.splitContainer1.Size = new System.Drawing.Size(584, 401);
             this.splitContainer1.SplitterDistance = 210;
             this.splitContainer1.TabIndex = 2;
+            // 
+            // LstView_Devices
+            // 
+            this.LstView_Devices.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.deviceColumn,
+            this.channelColumns});
+            this.LstView_Devices.Dock = System.Windows.Forms.DockStyle.Top;
+            this.LstView_Devices.Location = new System.Drawing.Point(0, 297);
+            this.LstView_Devices.Name = "LstView_Devices";
+            this.LstView_Devices.Size = new System.Drawing.Size(210, 97);
+            this.LstView_Devices.TabIndex = 3;
+            this.LstView_Devices.UseCompatibleStateImageBehavior = false;
+            this.LstView_Devices.View = System.Windows.Forms.View.Details;
+            // 
+            // deviceColumn
+            // 
+            this.deviceColumn.Text = "Device";
+            this.deviceColumn.Width = 100;
+            // 
+            // channelColumns
+            // 
+            this.channelColumns.Text = "Channels";
+            this.channelColumns.Width = 100;
             // 
             // LstView_Peers
             // 
@@ -564,130 +587,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Voice Client";
             // 
-            // Txt_FriendSuccess
-            // 
-            this.Txt_FriendSuccess.Location = new System.Drawing.Point(6, 35);
-            this.Txt_FriendSuccess.Name = "Txt_FriendSuccess";
-            this.Txt_FriendSuccess.ReadOnly = true;
-            this.Txt_FriendSuccess.Size = new System.Drawing.Size(132, 20);
-            this.Txt_FriendSuccess.TabIndex = 1;
-            // 
-            // Btn_FriendRequest
-            // 
-            this.Btn_FriendRequest.BackColor = System.Drawing.SystemColors.Control;
-            this.Btn_FriendRequest.Location = new System.Drawing.Point(6, 6);
-            this.Btn_FriendRequest.Name = "Btn_FriendRequest";
-            this.Btn_FriendRequest.Size = new System.Drawing.Size(132, 23);
-            this.Btn_FriendRequest.TabIndex = 0;
-            this.Btn_FriendRequest.Text = "Send Friend Request";
-            this.Btn_FriendRequest.UseVisualStyleBackColor = false;
-            this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
-            // 
-            // LstView_Devices
-            // 
-            this.LstView_Devices.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.deviceColumn,
-            this.channelColumns});
-            this.LstView_Devices.Dock = System.Windows.Forms.DockStyle.Top;
-            this.LstView_Devices.Location = new System.Drawing.Point(0, 297);
-            this.LstView_Devices.Name = "LstView_Devices";
-            this.LstView_Devices.Size = new System.Drawing.Size(210, 97);
-            this.LstView_Devices.TabIndex = 3;
-            this.LstView_Devices.UseCompatibleStateImageBehavior = false;
-            this.LstView_Devices.View = System.Windows.Forms.View.Details;
-            // 
-            // deviceColumn
-            // 
-            this.deviceColumn.Text = "Device";
-            this.deviceColumn.Width = 100;
-            // 
-            // channelColumns
-            // 
-            this.channelColumns.Text = "Channels";
-            this.channelColumns.Width = 100;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label14.Location = new System.Drawing.Point(140, 52);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(53, 15);
-            this.label14.TabIndex = 25;
-            this.label14.Text = "Bit Depth";
-            // 
-            // CmbBox_BitDepth
-            // 
-            this.CmbBox_BitDepth.FormattingEnabled = true;
-            this.CmbBox_BitDepth.Items.AddRange(new object[] {
-            "16",
-            "24"});
-            this.CmbBox_BitDepth.Location = new System.Drawing.Point(6, 46);
-            this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
-            this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
-            this.CmbBox_BitDepth.TabIndex = 24;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label15.Location = new System.Drawing.Point(140, 22);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(47, 15);
-            this.label15.TabIndex = 23;
-            this.label15.Text = "Bit Rate";
-            // 
-            // CmbBox_SampleRate
-            // 
-            this.CmbBox_SampleRate.FormattingEnabled = true;
-            this.CmbBox_SampleRate.Items.AddRange(new object[] {
-            "1000",
-            "2000",
-            "4000",
-            "8000",
-            "11025",
-            "22050",
-            "32000",
-            "44100",
-            "48000",
-            "64000",
-            "88200",
-            "96000"});
-            this.CmbBox_SampleRate.Location = new System.Drawing.Point(6, 19);
-            this.CmbBox_SampleRate.Name = "CmbBox_SampleRate";
-            this.CmbBox_SampleRate.Size = new System.Drawing.Size(128, 21);
-            this.CmbBox_SampleRate.TabIndex = 22;
-            // 
-            // Btn_Exit
-            // 
-            this.Btn_Exit.Location = new System.Drawing.Point(210, 77);
-            this.Btn_Exit.Name = "Btn_Exit";
-            this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
-            this.Btn_Exit.TabIndex = 21;
-            this.Btn_Exit.Text = "Exit";
-            this.Btn_Exit.UseVisualStyleBackColor = true;
-            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
-            // 
-            // Btn_Stop
-            // 
-            this.Btn_Stop.Location = new System.Drawing.Point(210, 48);
-            this.Btn_Stop.Name = "Btn_Stop";
-            this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
-            this.Btn_Stop.TabIndex = 20;
-            this.Btn_Stop.Text = "Stop";
-            this.Btn_Stop.UseVisualStyleBackColor = true;
-            this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
-            // 
-            // Btn_Start
-            // 
-            this.Btn_Start.Location = new System.Drawing.Point(210, 19);
-            this.Btn_Start.Name = "Btn_Start";
-            this.Btn_Start.Size = new System.Drawing.Size(128, 23);
-            this.Btn_Start.TabIndex = 19;
-            this.Btn_Start.Text = "Start";
-            this.Btn_Start.UseVisualStyleBackColor = true;
-            this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
-            // 
             // label16
             // 
             this.label16.AutoSize = true;
@@ -712,7 +611,6 @@
             // 
             this.Txt_ServAddress.Location = new System.Drawing.Point(6, 137);
             this.Txt_ServAddress.Name = "Txt_ServAddress";
-            this.Txt_ServAddress.ReadOnly = true;
             this.Txt_ServAddress.Size = new System.Drawing.Size(128, 20);
             this.Txt_ServAddress.TabIndex = 27;
             // 
@@ -723,6 +621,107 @@
             this.Txt_ServPort.ReadOnly = true;
             this.Txt_ServPort.Size = new System.Drawing.Size(128, 20);
             this.Txt_ServPort.TabIndex = 26;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label14.Location = new System.Drawing.Point(140, 52);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(53, 15);
+            this.label14.TabIndex = 25;
+            this.label14.Text = "Bit Depth";
+            // 
+            // CmbBox_BitDepth
+            // 
+            this.CmbBox_BitDepth.FormattingEnabled = true;
+            this.CmbBox_BitDepth.Items.AddRange(new object[] {
+            "16",
+            "24"});
+            this.CmbBox_BitDepth.Location = new System.Drawing.Point(6, 46);
+            this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
+            this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
+            this.CmbBox_BitDepth.TabIndex = 24;
+            // 
+            // Btn_Stop
+            // 
+            this.Btn_Stop.Location = new System.Drawing.Point(210, 48);
+            this.Btn_Stop.Name = "Btn_Stop";
+            this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Stop.TabIndex = 20;
+            this.Btn_Stop.Text = "Stop";
+            this.Btn_Stop.UseVisualStyleBackColor = true;
+            this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
+            // 
+            // Btn_Start
+            // 
+            this.Btn_Start.Location = new System.Drawing.Point(210, 19);
+            this.Btn_Start.Name = "Btn_Start";
+            this.Btn_Start.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Start.TabIndex = 19;
+            this.Btn_Start.Text = "Start";
+            this.Btn_Start.UseVisualStyleBackColor = true;
+            this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label15.Location = new System.Drawing.Point(140, 22);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(47, 15);
+            this.label15.TabIndex = 23;
+            this.label15.Text = "Bit Rate";
+            // 
+            // Btn_Exit
+            // 
+            this.Btn_Exit.Location = new System.Drawing.Point(210, 77);
+            this.Btn_Exit.Name = "Btn_Exit";
+            this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Exit.TabIndex = 21;
+            this.Btn_Exit.Text = "Exit";
+            this.Btn_Exit.UseVisualStyleBackColor = true;
+            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
+            // 
+            // CmbBox_SampleRate
+            // 
+            this.CmbBox_SampleRate.FormattingEnabled = true;
+            this.CmbBox_SampleRate.Items.AddRange(new object[] {
+            "1000",
+            "2000",
+            "4000",
+            "8000",
+            "11025",
+            "22050",
+            "32000",
+            "44100",
+            "48000",
+            "64000",
+            "88200",
+            "96000"});
+            this.CmbBox_SampleRate.Location = new System.Drawing.Point(6, 19);
+            this.CmbBox_SampleRate.Name = "CmbBox_SampleRate";
+            this.CmbBox_SampleRate.Size = new System.Drawing.Size(128, 21);
+            this.CmbBox_SampleRate.TabIndex = 22;
+            // 
+            // Txt_FriendSuccess
+            // 
+            this.Txt_FriendSuccess.Location = new System.Drawing.Point(6, 35);
+            this.Txt_FriendSuccess.Name = "Txt_FriendSuccess";
+            this.Txt_FriendSuccess.ReadOnly = true;
+            this.Txt_FriendSuccess.Size = new System.Drawing.Size(132, 20);
+            this.Txt_FriendSuccess.TabIndex = 1;
+            // 
+            // Btn_FriendRequest
+            // 
+            this.Btn_FriendRequest.BackColor = System.Drawing.SystemColors.Control;
+            this.Btn_FriendRequest.Location = new System.Drawing.Point(6, 6);
+            this.Btn_FriendRequest.Name = "Btn_FriendRequest";
+            this.Btn_FriendRequest.Size = new System.Drawing.Size(132, 23);
+            this.Btn_FriendRequest.TabIndex = 0;
+            this.Btn_FriendRequest.Text = "Send Friend Request";
+            this.Btn_FriendRequest.UseVisualStyleBackColor = false;
+            this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
             // 
             // Form1
             // 
