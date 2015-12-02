@@ -71,9 +71,23 @@
             this.Btn_Connect = new System.Windows.Forms.Button();
             this.Txt_Address = new System.Windows.Forms.TextBox();
             this.commPage = new System.Windows.Forms.TabPage();
-            this.Btn_FriendRequest = new System.Windows.Forms.Button();
-            this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
+            this.Btn_FriendRequest = new System.Windows.Forms.Button();
+            this.LstView_Devices = new System.Windows.Forms.ListView();
+            this.deviceColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.channelColumns = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label14 = new System.Windows.Forms.Label();
+            this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
+            this.Btn_Exit = new System.Windows.Forms.Button();
+            this.Btn_Stop = new System.Windows.Forms.Button();
+            this.Btn_Start = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.Txt_ServAddress = new System.Windows.Forms.TextBox();
+            this.Txt_ServPort = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -83,6 +97,7 @@
             this.registerPage.SuspendLayout();
             this.loginPage.SuspendLayout();
             this.commPage.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // Txt_Username
@@ -112,15 +127,16 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.LstView_Devices);
             this.splitContainer1.Panel1.Controls.Add(this.LstView_Peers);
             this.splitContainer1.Panel1.Controls.Add(this.LstView_Requests);
             this.splitContainer1.Panel1.Controls.Add(this.LstView_Friends);
             this.splitContainer1.Panel1MinSize = 200;
             // 
-            // splitContainer1.Panel2
+            // 
             // 
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel1);
-            this.splitContainer1.Size = new System.Drawing.Size(584, 301);
+            this.splitContainer1.Size = new System.Drawing.Size(584, 401);
             this.splitContainer1.SplitterDistance = 210;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -181,7 +197,7 @@
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(370, 301);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(370, 401);
             this.flowLayoutPanel1.TabIndex = 2;
             // 
             // tabControl1
@@ -192,7 +208,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(364, 294);
+            this.tabControl1.Size = new System.Drawing.Size(364, 391);
             this.tabControl1.TabIndex = 0;
             // 
             // registerPage
@@ -223,7 +239,7 @@
             this.registerPage.Location = new System.Drawing.Point(4, 22);
             this.registerPage.Name = "registerPage";
             this.registerPage.Padding = new System.Windows.Forms.Padding(3);
-            this.registerPage.Size = new System.Drawing.Size(356, 268);
+            this.registerPage.Size = new System.Drawing.Size(356, 365);
             this.registerPage.TabIndex = 2;
             this.registerPage.Text = "Register";
             this.registerPage.UseVisualStyleBackColor = true;
@@ -451,7 +467,7 @@
             this.loginPage.Location = new System.Drawing.Point(4, 22);
             this.loginPage.Name = "loginPage";
             this.loginPage.Padding = new System.Windows.Forms.Padding(3);
-            this.loginPage.Size = new System.Drawing.Size(356, 268);
+            this.loginPage.Size = new System.Drawing.Size(356, 365);
             this.loginPage.TabIndex = 0;
             this.loginPage.Text = "Login";
             this.loginPage.UseVisualStyleBackColor = true;
@@ -522,10 +538,39 @@
             this.commPage.Location = new System.Drawing.Point(4, 22);
             this.commPage.Name = "commPage";
             this.commPage.Padding = new System.Windows.Forms.Padding(3);
-            this.commPage.Size = new System.Drawing.Size(356, 268);
+            this.commPage.Size = new System.Drawing.Size(356, 365);
             this.commPage.TabIndex = 1;
             this.commPage.Text = "Communicate";
             this.commPage.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox1.Controls.Add(this.label16);
+            this.groupBox1.Controls.Add(this.label17);
+            this.groupBox1.Controls.Add(this.Txt_ServAddress);
+            this.groupBox1.Controls.Add(this.Txt_ServPort);
+            this.groupBox1.Controls.Add(this.label14);
+            this.groupBox1.Controls.Add(this.CmbBox_BitDepth);
+            this.groupBox1.Controls.Add(this.Btn_Stop);
+            this.groupBox1.Controls.Add(this.Btn_Start);
+            this.groupBox1.Controls.Add(this.label15);
+            this.groupBox1.Controls.Add(this.Btn_Exit);
+            this.groupBox1.Controls.Add(this.CmbBox_SampleRate);
+            this.groupBox1.Location = new System.Drawing.Point(6, 61);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(344, 189);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Voice Client";
+            // 
+            // Txt_FriendSuccess
+            // 
+            this.Txt_FriendSuccess.Location = new System.Drawing.Point(6, 35);
+            this.Txt_FriendSuccess.Name = "Txt_FriendSuccess";
+            this.Txt_FriendSuccess.ReadOnly = true;
+            this.Txt_FriendSuccess.Size = new System.Drawing.Size(132, 20);
+            this.Txt_FriendSuccess.TabIndex = 1;
             // 
             // Btn_FriendRequest
             // 
@@ -538,28 +583,152 @@
             this.Btn_FriendRequest.UseVisualStyleBackColor = false;
             this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
             // 
-            // Txt_FriendSuccess
+            // LstView_Devices
             // 
-            this.Txt_FriendSuccess.Location = new System.Drawing.Point(6, 35);
-            this.Txt_FriendSuccess.Name = "Txt_FriendSuccess";
-            this.Txt_FriendSuccess.ReadOnly = true;
-            this.Txt_FriendSuccess.Size = new System.Drawing.Size(132, 20);
-            this.Txt_FriendSuccess.TabIndex = 1;
+            this.LstView_Devices.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.deviceColumn,
+            this.channelColumns});
+            this.LstView_Devices.Dock = System.Windows.Forms.DockStyle.Top;
+            this.LstView_Devices.Location = new System.Drawing.Point(0, 297);
+            this.LstView_Devices.Name = "LstView_Devices";
+            this.LstView_Devices.Size = new System.Drawing.Size(210, 97);
+            this.LstView_Devices.TabIndex = 3;
+            this.LstView_Devices.UseCompatibleStateImageBehavior = false;
+            this.LstView_Devices.View = System.Windows.Forms.View.Details;
             // 
-            // groupBox1
+            // deviceColumn
             // 
-            this.groupBox1.Location = new System.Drawing.Point(6, 61);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(344, 100);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Voice Client";
+            this.deviceColumn.Text = "Device";
+            this.deviceColumn.Width = 100;
+            // 
+            // channelColumns
+            // 
+            this.channelColumns.Text = "Channels";
+            this.channelColumns.Width = 100;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label14.Location = new System.Drawing.Point(140, 52);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(53, 15);
+            this.label14.TabIndex = 25;
+            this.label14.Text = "Bit Depth";
+            // 
+            // CmbBox_BitDepth
+            // 
+            this.CmbBox_BitDepth.FormattingEnabled = true;
+            this.CmbBox_BitDepth.Items.AddRange(new object[] {
+            "16",
+            "24"});
+            this.CmbBox_BitDepth.Location = new System.Drawing.Point(6, 46);
+            this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
+            this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
+            this.CmbBox_BitDepth.TabIndex = 24;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label15.Location = new System.Drawing.Point(140, 22);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(47, 15);
+            this.label15.TabIndex = 23;
+            this.label15.Text = "Bit Rate";
+            // 
+            // CmbBox_SampleRate
+            // 
+            this.CmbBox_SampleRate.FormattingEnabled = true;
+            this.CmbBox_SampleRate.Items.AddRange(new object[] {
+            "1000",
+            "2000",
+            "4000",
+            "8000",
+            "11025",
+            "22050",
+            "32000",
+            "44100",
+            "48000",
+            "64000",
+            "88200",
+            "96000"});
+            this.CmbBox_SampleRate.Location = new System.Drawing.Point(6, 19);
+            this.CmbBox_SampleRate.Name = "CmbBox_SampleRate";
+            this.CmbBox_SampleRate.Size = new System.Drawing.Size(128, 21);
+            this.CmbBox_SampleRate.TabIndex = 22;
+            // 
+            // Btn_Exit
+            // 
+            this.Btn_Exit.Location = new System.Drawing.Point(210, 77);
+            this.Btn_Exit.Name = "Btn_Exit";
+            this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Exit.TabIndex = 21;
+            this.Btn_Exit.Text = "Exit";
+            this.Btn_Exit.UseVisualStyleBackColor = true;
+            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
+            // 
+            // Btn_Stop
+            // 
+            this.Btn_Stop.Location = new System.Drawing.Point(210, 48);
+            this.Btn_Stop.Name = "Btn_Stop";
+            this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Stop.TabIndex = 20;
+            this.Btn_Stop.Text = "Stop";
+            this.Btn_Stop.UseVisualStyleBackColor = true;
+            this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
+            // 
+            // Btn_Start
+            // 
+            this.Btn_Start.Location = new System.Drawing.Point(210, 19);
+            this.Btn_Start.Name = "Btn_Start";
+            this.Btn_Start.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Start.TabIndex = 19;
+            this.Btn_Start.Text = "Start";
+            this.Btn_Start.UseVisualStyleBackColor = true;
+            this.Btn_Start.Click += new System.EventHandler(this.Btn_Start_Click);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label16.Location = new System.Drawing.Point(140, 140);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(60, 15);
+            this.label16.TabIndex = 29;
+            this.label16.Text = "IP Address";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label17.Location = new System.Drawing.Point(140, 166);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(28, 15);
+            this.label17.TabIndex = 28;
+            this.label17.Text = "Port";
+            // 
+            // Txt_ServAddress
+            // 
+            this.Txt_ServAddress.Location = new System.Drawing.Point(6, 137);
+            this.Txt_ServAddress.Name = "Txt_ServAddress";
+            this.Txt_ServAddress.ReadOnly = true;
+            this.Txt_ServAddress.Size = new System.Drawing.Size(128, 20);
+            this.Txt_ServAddress.TabIndex = 27;
+            // 
+            // Txt_ServPort
+            // 
+            this.Txt_ServPort.Location = new System.Drawing.Point(6, 163);
+            this.Txt_ServPort.Name = "Txt_ServPort";
+            this.Txt_ServPort.ReadOnly = true;
+            this.Txt_ServPort.Size = new System.Drawing.Size(128, 20);
+            this.Txt_ServPort.TabIndex = 26;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 301);
+            this.ClientSize = new System.Drawing.Size(584, 401);
             this.Controls.Add(this.splitContainer1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -575,6 +744,8 @@
             this.loginPage.PerformLayout();
             this.commPage.ResumeLayout(false);
             this.commPage.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -627,6 +798,20 @@
         private System.Windows.Forms.Button Btn_FriendRequest;
         private System.Windows.Forms.TextBox Txt_FriendSuccess;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ListView LstView_Devices;
+        private System.Windows.Forms.ColumnHeader deviceColumn;
+        private System.Windows.Forms.ColumnHeader channelColumns;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ComboBox CmbBox_BitDepth;
+        private System.Windows.Forms.Button Btn_Stop;
+        private System.Windows.Forms.Button Btn_Start;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Button Btn_Exit;
+        private System.Windows.Forms.ComboBox CmbBox_SampleRate;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox Txt_ServAddress;
+        private System.Windows.Forms.TextBox Txt_ServPort;
     }
 }
 

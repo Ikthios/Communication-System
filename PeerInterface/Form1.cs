@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using NAudio.Wave;
 
 namespace PeerInterface
 {
@@ -15,12 +16,57 @@ namespace PeerInterface
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        //Socket sendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         UdpClient peerReceiver;
         IPEndPoint hostEP, listenEP;
         // Create sender and listener threads
         Thread sendThread;
         Thread listenThread;
+
+        public Form1()
+        {
+            // Start GUI form
+            InitializeComponent();
+
+            /*
+            Below here resides the initialization
+            code for the voice communication section
+            in the peer interface.
+            */
+            // Disable stop button
+            Btn_Stop.Enabled = false;
+
+            // Set default values on form load
+            CmbBox_SampleRate.SelectedIndex = 7;
+            CmbBox_BitDepth.SelectedIndex = 0;
+            Txt_ServAddress.Text = "127.0.0.1";
+            Txt_ServPort.Text = "6000";
+
+            // List input devices on form load
+            GetInputDevices();
+
+            // Start the listener on form load
+            Thread receivingThread = new Thread(Listener);
+            receivingThread.Start();
+            /*
+            Stop audio section
+            */
+
+            // Show peer address to user
+            Txt_Address.Text = GetIpAddress();
+            setServerAddress("10.134.172.46");
+            Txt_LoginServAddress.Text = getServerAddress();
+
+            Thread.Sleep(3000);
+
+            sendThread = new Thread(new ThreadStart(UdpSender));
+            listenThread = new Thread(new ThreadStart(UdpListener));
+            // Start sender and listener threads
+            sendThread.Start();
+            listenThread.Start();
+
+            // Set the delegate
+            myDelegate = new AddListItem(AddListItemMethod);
+        }
 
         // Used for gathering peer information from the network
         private string peerString;
@@ -50,28 +96,6 @@ namespace PeerInterface
         private AddListItem myDelegate;
 
         private List<string> peerStringList = new List<string>();
-
-        public Form1()
-        {
-            // Start GUI form
-            InitializeComponent();
-
-            // Show peer address to user
-            Txt_Address.Text = GetIpAddress();
-            setServerAddress("10.134.172.46");
-            Txt_LoginServAddress.Text = getServerAddress();
-
-            Thread.Sleep(3000);
-
-            sendThread = new Thread(new ThreadStart(UdpSender));
-            listenThread = new Thread(new ThreadStart(UdpListener));
-            // Start sender and listener threads
-            sendThread.Start();
-            listenThread.Start();
-
-            // Set the delegate
-            myDelegate = new AddListItem(AddListItemMethod);
-        }
 
 
 
@@ -358,8 +382,6 @@ namespace PeerInterface
             }
         }
 
-
-
         // Get peer IP address
         public string GetIpAddress()
         {
@@ -374,6 +396,166 @@ namespace PeerInterface
                 }
             }
             return localIp;
+        }
+
+        /*
+        Below here resides the audio code
+        for communicating with other peers
+        over the network. The code in this
+        section will eventually be moved
+        over to the 'voice.cs' class after
+        the feature has been confirmed to
+        work nicely.
+        */
+        // Global variables
+        UdpClient udpSender;
+        UdpClient udpReceiver;
+        WaveIn sourcestream = null;
+        WaveOut waveout = null;
+        BufferedWaveProvider waveProvider = null;
+        IPEndPoint audioEP;
+
+        private void Btn_Start_Click(object sender, EventArgs e)
+        {
+            // Return if no items are selected
+            if (LstView_Devices.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("A input device must be selected.");
+            }
+            else
+            {
+                // Disable the start button and enable the stop button
+                Btn_Start.Enabled = false;
+                Btn_Stop.Enabled = true;
+
+                try
+                {
+                    // Get the endpoint
+                    audioEP = new IPEndPoint(IPAddress.Parse(Txt_ServAddress.Text),
+                                                                int.Parse(Txt_ServPort.Text));
+                    int bitRate = int.Parse(CmbBox_SampleRate.Text);
+                    int bitDepth = int.Parse(CmbBox_BitDepth.Text);
+                    // Connect to the peer
+                    Connect(LstView_Devices.SelectedItems[0].Index, bitRate, bitDepth);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                }
+            }
+        }
+
+        private void Btn_Stop_Click_1(object sender, EventArgs e)
+        {
+            Btn_Stop.Enabled = false;
+            Btn_Start.Enabled = true;
+
+            udpSender.Close();
+            udpReceiver.Close();
+
+            if (waveout != null)
+            {
+                waveout.Stop();
+                waveout.Dispose();
+                waveout = null;
+            }
+            if (sourcestream != null)
+            {
+                sourcestream.StopRecording();
+                sourcestream.Dispose();
+                sourcestream = null;
+            }
+        }
+
+        private void Btn_Exit_Click(object sender, EventArgs e)
+        {
+            Btn_Stop_Click_1(sender, e);
+            this.Close();
+        }
+
+        private void GetInputDevices()
+        {
+            // Get information about connected devices
+            List<WaveInCapabilities> deviceList = new List<WaveInCapabilities>();
+            for (int waveInDevice = 0; waveInDevice < WaveIn.DeviceCount; waveInDevice++)
+            {
+                WaveInCapabilities deviceInfo = WaveIn.GetCapabilities(waveInDevice);
+                deviceList.Add(WaveIn.GetCapabilities(waveInDevice));
+            }
+
+            LstView_Devices.Items.Clear();
+
+            foreach (var device in deviceList)
+            {
+                ListViewItem item = new ListViewItem(device.ProductName);
+                item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.Channels.ToString()));
+                LstView_Devices.Items.Add(item);
+            }
+        }
+
+        private void Connect(int inputDeviceNumber, int bitRate, int bitDepth)
+        {
+            sourcestream = new WaveIn();
+            sourcestream.BufferMilliseconds = 50;
+            sourcestream.DeviceNumber = inputDeviceNumber;
+            sourcestream.WaveFormat = new WaveFormat(bitRate, bitDepth, WaveIn.GetCapabilities(inputDeviceNumber).Channels);
+            sourcestream.DataAvailable += sourcestream_DataAvailable;
+            sourcestream.StartRecording();
+
+            udpSender = new UdpClient();
+            udpReceiver = new UdpClient();
+
+            udpReceiver.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            udpReceiver.Client.Bind(audioEP);
+
+            udpSender.Connect(audioEP);
+
+            waveout = new WaveOut();
+            waveProvider = new BufferedWaveProvider(sourcestream.WaveFormat);
+
+            waveout.Init(waveProvider);
+            waveout.Play();
+
+            var state = new ListenerState { EndPoint = audioEP };
+            ThreadPool.QueueUserWorkItem(Listener, state);
+        }
+
+        private void sourcestream_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            try
+            {
+                byte[] buffer = (e.Buffer);
+                udpSender.Send(buffer, buffer.Length);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+        }
+
+
+        class ListenerState
+        {
+            public IPEndPoint EndPoint { get; set; }
+        }
+
+        private void Listener(object state)
+        {
+            var ListenerState = (ListenerState)state;
+            //var endPoint = ListenerState.EndPoint;
+
+            try
+            {
+                while (true)
+                {
+                    byte[] buffer = udpReceiver.Receive(ref audioEP);
+                    waveProvider.AddSamples(buffer, 0, buffer.Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }
