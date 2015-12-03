@@ -53,10 +53,14 @@ namespace PeerInterface
             udpSender = new UdpClient();
             udpSender.Connect(audioEP);
 
+            /*
             waveout = new WaveOut();
             waveProvider = new BufferedWaveProvider(sourcestream.WaveFormat);
             waveout.Init(waveProvider);
             waveout.Play();
+            */
+            Thread audioThread = new Thread(new ThreadStart(AudioPlayer));
+            audioThread.Start();
         }
 
         private void sourcestream_DataAvailable(object sender, WaveInEventArgs e)
@@ -72,6 +76,14 @@ namespace PeerInterface
             }
         }
 
+        private void AudioPlayer()
+        {
+            waveout = new WaveOut();
+            waveProvider = new BufferedWaveProvider(sourcestream.WaveFormat);
+            waveout.Init(waveProvider);
+            waveout.Play();
+        }
+
         public void AudioPlayer(int deviceID, int bitRate, int bitDepth)
         {
             listenerstream = new WaveInEvent();
@@ -82,6 +94,9 @@ namespace PeerInterface
             listenerProvider = new BufferedWaveProvider(listenerstream.WaveFormat);
             listenerout.Init(listenerProvider);
             listenerout.Play();
+
+            Thread listenerThread = new Thread(new ThreadStart(AudioListener));
+            listenerThread.Start();
         }
 
         public void AudioListener()
@@ -95,7 +110,7 @@ namespace PeerInterface
                 while (true)
                 {
                     byte[] buffer = udpListener.Receive(ref listeningEP);
-                    listenerProvider.AddSamples(buffer, 0, buffer.Length);
+                    waveProvider.AddSamples(buffer, 0, buffer.Length);
                 }
             }
             catch (Exception ex)

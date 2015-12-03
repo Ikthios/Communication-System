@@ -428,7 +428,7 @@ namespace PeerInterface
             int deviceID = Cmb_InputDevices.SelectedIndex;
 
             Voice voice = new Voice();
-            voice.AudioPlayer(deviceID, bitRate, bitDepth);
+            //voice.AudioPlayer(deviceID, bitRate, bitDepth);
 
             Thread listenerThread = new Thread(new ThreadStart(voice.AudioListener));
             listenerThread.Start();
