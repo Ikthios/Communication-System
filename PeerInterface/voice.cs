@@ -21,6 +21,11 @@ namespace PeerInterface
         WaveOut waveout = null;
         BufferedWaveProvider waveProvider = null;
 
+        // Connect Variables
+        string peerAddress;
+        int deviceID, bitRate, bitDepth;
+        IPEndPoint audioEP;
+
         public void Start(string peerAddress, int deviceID, int bitRate, int bitDepth)
         {
             try
@@ -28,9 +33,15 @@ namespace PeerInterface
                 // Get the endpoint
                 //string[] tokens = peerAddress.Split(',');
                 //IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(tokens[1].ToString()), 6000);
-                IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(peerAddress), 6000);
+                audioEP = new IPEndPoint(IPAddress.Parse(peerAddress), 6000);
+                this.peerAddress = peerAddress;
+                this.deviceID = deviceID;
+                this.bitRate = bitRate;
+                this.bitDepth = bitDepth;
+                Thread connectThread = new Thread(new ThreadStart(Connect));
+                connectThread.Start();
                 // Connect to the peer
-                Connect(audioEP, deviceID, bitRate, bitDepth);
+                //Connect(audioEP, deviceID, bitRate, bitDepth);
             }
             catch (Exception ex)
             {
@@ -38,7 +49,7 @@ namespace PeerInterface
             }
         }
 
-        private void Connect(IPEndPoint audioEP, int deviceID, int bitRate, int bitDepth)
+        private void Connect()
         {
             sourcestream = new WaveIn();
             sourcestream.BufferMilliseconds = 50;
@@ -69,6 +80,26 @@ namespace PeerInterface
             }
         }
 
+        public void AudioListener()
+        {
+            IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 5000);
+            try
+            {
+                udpListener = new UdpClient();
+                udpListener.Client.Bind(listeningEP);
+
+                while (true)
+                {
+                    byte[] buffer = udpListener.Receive(ref listeningEP);
+                    waveProvider.AddSamples(buffer, 0, buffer.Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
         public void Stop()
         {
             try
@@ -92,26 +123,6 @@ namespace PeerInterface
             catch(Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            }
-        }
-
-        public void AudioListener()
-        {
-            IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6000);
-            try
-            {
-                udpListener = new UdpClient();
-                udpListener.Client.Bind(listeningEP);
-
-                while (true)
-                {
-                    byte[] buffer = udpListener.Receive(ref listeningEP);
-                    waveProvider.AddSamples(buffer, 0, buffer.Length);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
             }
         }
     }
