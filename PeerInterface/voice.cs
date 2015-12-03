@@ -40,12 +40,12 @@ namespace PeerInterface
 
         private void Connect(IPEndPoint audioEP, int deviceID, int bitRate, int bitDepth)
         {
-            sourcestream.StartRecording();
             sourcestream = new WaveIn();
             sourcestream.BufferMilliseconds = 50;
             sourcestream.DeviceNumber = deviceID;
             sourcestream.WaveFormat = new WaveFormat(bitRate, bitDepth, WaveIn.GetCapabilities(deviceID).Channels);
             sourcestream.DataAvailable += sourcestream_DataAvailable;
+            sourcestream.StartRecording();
 
             udpSender = new UdpClient();
             udpSender.Connect(audioEP);
