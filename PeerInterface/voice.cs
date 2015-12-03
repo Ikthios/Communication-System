@@ -22,6 +22,8 @@ namespace PeerInterface
         BufferedWaveProvider waveProvider = null;
         BufferedWaveProvider listenerProvider = null;
 
+        //10.143.174.162
+
         public void Start(string peerAddress, int deviceID, int bitRate, int bitDepth)
         {
             try
@@ -29,7 +31,7 @@ namespace PeerInterface
                 // Get the endpoint
                 //string[] tokens = peerAddress.Split(',');
                 //IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(tokens[1].ToString()), 6000);
-                IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(peerAddress), 6000);
+                IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(peerAddress), 6001);
                 // Connect to the peer
                 Connect(audioEP, deviceID, bitRate, bitDepth);
             }
