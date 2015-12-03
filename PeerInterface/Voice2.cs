@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace PeerInterface
 {
-    class Voice
+    class Voice2
     {
         // Global variables
         UdpClient udpSender;
@@ -29,7 +29,7 @@ namespace PeerInterface
                 // Get the endpoint
                 //string[] tokens = peerAddress.Split(',');
                 //IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(tokens[1].ToString()), 6000);
-                IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(peerAddress), 6000);
+                IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(peerAddress), 6001);
                 // Connect to the peer
                 Connect(audioEP, deviceID, bitRate, bitDepth);
             }
@@ -72,7 +72,7 @@ namespace PeerInterface
 
         public void AudioListener()
         {
-            IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6000);
+            IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6001);
             try
             {
                 udpListener = new UdpClient();
@@ -110,7 +110,7 @@ namespace PeerInterface
                     sourcestream = null;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
