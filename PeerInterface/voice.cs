@@ -24,15 +24,10 @@ namespace PeerInterface
         BufferedWaveProvider waveProvider = null;
         BufferedWaveProvider listenerProvider = null;
 
-        int deviceID, bitRate, bitDepth;
-
         public void Start(string peerAddress, int deviceID, int bitRate, int bitDepth)
         {
             try
             {
-                this.deviceID = deviceID;
-                this.bitRate = bitRate;
-                this.bitDepth = bitDepth;
                 // Get the endpoint
                 //string[] tokens = peerAddress.Split(',');
                 //IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(tokens[1].ToString()), 6000);
@@ -77,10 +72,11 @@ namespace PeerInterface
             }
         }
 
-        private void AudioPlayer()
+        public void AudioPlayer(int deviceID, int bitRate, int bitDepth)
         {
             listenerstream = new WaveInEvent();
-            listenerstream.WaveFormat = new WaveFormat(this.bitRate, this.bitDepth, WaveIn.GetCapabilities(this.deviceID).Channels);
+            listenerstream.BufferMilliseconds = 50;
+            listenerstream.WaveFormat = new WaveFormat(bitRate, bitDepth, WaveIn.GetCapabilities(deviceID).Channels);
 
             listenerout = new WaveOutEvent();
             listenerProvider = new BufferedWaveProvider(listenerstream.WaveFormat);
@@ -93,8 +89,6 @@ namespace PeerInterface
             IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 5000);
             try
             {
-                AudioPlayer();
-
                 udpListener = new UdpClient();
                 udpListener.Client.Bind(listeningEP);
 

@@ -423,6 +423,13 @@ namespace PeerInterface
 
         private void Btn_StartAudioList_Click(object sender, EventArgs e)
         {
+            int bitRate = int.Parse(CmbBox_SampleRate.Text);
+            int bitDepth = int.Parse(CmbBox_BitDepth.Text);
+            int deviceID = Cmb_InputDevices.SelectedIndex;
+
+            Voice voice = new Voice();
+            voice.AudioPlayer(deviceID, bitRate, bitDepth);
+
             Thread listenerThread = new Thread(new ThreadStart(voice.AudioListener));
             listenerThread.Start();
 
