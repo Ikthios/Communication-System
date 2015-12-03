@@ -387,7 +387,12 @@ namespace PeerInterface
                 Btn_Start.Enabled = false;
                 Btn_Stop.Enabled = true;
 
-                voice.Start(LstView_Peers.SelectedItems[0].Text, Txt_ServPort.Text);
+                string peerAddress = LstView_Peers.SelectedItems[0].Text;
+                int bitRate = int.Parse(CmbBox_SampleRate.SelectedText.ToString());
+                int bitDepth = int.Parse(CmbBox_BitDepth.SelectedText.ToString());
+                int deviceID = int.Parse(LstView_Devices.SelectedItems[0].Text);
+
+                voice.Start(peerAddress, deviceID, bitRate, bitDepth);
             }
         }
 
@@ -407,11 +412,8 @@ namespace PeerInterface
 
         private void Btn_StartAudioList_Click(object sender, EventArgs e)
         {
-            Voice voice = new Voice();
-            int sampleRate = int.Parse(CmbBox_SampleRate.Text);
-            int bitDepth = int.Parse(CmbBox_BitDepth.Text);
-
-            voice.StartAudioListener(LstView_Devices.SelectedItems[0].Index, sampleRate, bitDepth);
+            Thread listenerThread = new Thread(new ThreadStart(voice.AudioListener));
+            listenerThread.Start();
 
             Btn_StartAudioList.Text = "Listening";
             Btn_StartAudioList.BackColor = System.Drawing.Color.Green;
