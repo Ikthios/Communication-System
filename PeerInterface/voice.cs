@@ -18,8 +18,8 @@ namespace PeerInterface
         UdpClient udpSender;
         UdpClient udpListener;
         WaveIn sourcestream = null;
-        WaveIn listenerstream = null;
-        WaveOut listenerout = null;
+        WaveInEvent listenerstream = null;
+        WaveOutEvent listenerout = null;
         WaveOut waveout = null;
         BufferedWaveProvider waveProvider = null;
         BufferedWaveProvider listenerProvider = null;
@@ -77,25 +77,26 @@ namespace PeerInterface
             }
         }
 
+        private void AudioPlayer()
+        {
+            listenerstream = new WaveInEvent();
+            listenerstream.WaveFormat = new WaveFormat(this.bitRate, this.bitDepth, WaveIn.GetCapabilities(this.deviceID).Channels);
+
+            listenerout = new WaveOutEvent();
+            listenerProvider = new BufferedWaveProvider(listenerstream.WaveFormat);
+            listenerout.Init(listenerProvider);
+            listenerout.Play();
+        }
+
         public void AudioListener()
         {
             IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 5000);
             try
             {
-                listenerstream = new WaveIn();
-                listenerstream.BufferMilliseconds = 50;
-                listenerstream.DeviceNumber = this.deviceID;
-                listenerstream.WaveFormat = new WaveFormat(this.bitRate, this.bitDepth, WaveIn.GetCapabilities(this.deviceID).Channels);
-                listenerstream.DataAvailable += listenerstream_DataAvailable;
-                listenerstream.StartRecording();
+                AudioPlayer();
 
                 udpListener = new UdpClient();
                 udpListener.Client.Bind(listeningEP);
-
-                listenerout = new WaveOut();
-                listenerProvider = new BufferedWaveProvider(listenerstream.WaveFormat);
-                listenerout.Init(listenerProvider);
-                listenerout.Play();
 
                 while (true)
                 {
@@ -106,19 +107,6 @@ namespace PeerInterface
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
-        }
-
-        private void listenerstream_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            try
-            {
-                byte[] buffer = (e.Buffer);
-                udpSender.Send(buffer, buffer.Length);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
             }
         }
 
