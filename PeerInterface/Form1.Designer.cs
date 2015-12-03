@@ -88,6 +88,7 @@
             this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
             this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
             this.Btn_FriendRequest = new System.Windows.Forms.Button();
+            this.Btn_StartAudioList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -569,6 +570,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox1.Controls.Add(this.Btn_StartAudioList);
             this.groupBox1.Controls.Add(this.label16);
             this.groupBox1.Controls.Add(this.label17);
             this.groupBox1.Controls.Add(this.Txt_ServAddress);
@@ -645,7 +647,7 @@
             // 
             // Btn_Stop
             // 
-            this.Btn_Stop.Location = new System.Drawing.Point(210, 48);
+            this.Btn_Stop.Location = new System.Drawing.Point(210, 72);
             this.Btn_Stop.Name = "Btn_Stop";
             this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
             this.Btn_Stop.TabIndex = 20;
@@ -655,7 +657,7 @@
             // 
             // Btn_Start
             // 
-            this.Btn_Start.Location = new System.Drawing.Point(210, 19);
+            this.Btn_Start.Location = new System.Drawing.Point(210, 43);
             this.Btn_Start.Name = "Btn_Start";
             this.Btn_Start.Size = new System.Drawing.Size(128, 23);
             this.Btn_Start.TabIndex = 19;
@@ -675,7 +677,7 @@
             // 
             // Btn_Exit
             // 
-            this.Btn_Exit.Location = new System.Drawing.Point(210, 77);
+            this.Btn_Exit.Location = new System.Drawing.Point(210, 101);
             this.Btn_Exit.Name = "Btn_Exit";
             this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
             this.Btn_Exit.TabIndex = 21;
@@ -722,6 +724,16 @@
             this.Btn_FriendRequest.Text = "Send Friend Request";
             this.Btn_FriendRequest.UseVisualStyleBackColor = false;
             this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
+            // 
+            // Btn_StartAudioList
+            // 
+            this.Btn_StartAudioList.Location = new System.Drawing.Point(210, 14);
+            this.Btn_StartAudioList.Name = "Btn_StartAudioList";
+            this.Btn_StartAudioList.Size = new System.Drawing.Size(128, 23);
+            this.Btn_StartAudioList.TabIndex = 30;
+            this.Btn_StartAudioList.Text = "Audio Listener";
+            this.Btn_StartAudioList.UseVisualStyleBackColor = true;
+            this.Btn_StartAudioList.Click += new System.EventHandler(this.Btn_StartAudioList_Click);
             // 
             // Form1
             // 
@@ -811,6 +823,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox Txt_ServAddress;
         private System.Windows.Forms.TextBox Txt_ServPort;
+        private System.Windows.Forms.Button Btn_StartAudioList;
     }
 }
 

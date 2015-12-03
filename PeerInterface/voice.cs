@@ -7,6 +7,8 @@ using NAudio.Wave;
 using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace PeerInterface
 {
@@ -19,7 +21,7 @@ namespace PeerInterface
         WaveOut waveout = null;
         BufferedWaveProvider waveProvider = null;
 
-        public void Start(string peerAddress, string peerPort, string bitRate, string bitDepth, int deviceID)
+        public void Start(string peerAddress, string peerPort)
         {
             try
             {
@@ -28,7 +30,7 @@ namespace PeerInterface
                 IPEndPoint audioEP = new IPEndPoint(IPAddress.Parse(tokens[1].ToString()),
                                                             int.Parse(peerPort));
                 // Connect to the peer
-                Connect(audioEP, deviceID, int.Parse(bitRate), int.Parse(bitDepth));
+                Connect(audioEP);
             }
             catch (Exception ex)
             {
@@ -36,22 +38,27 @@ namespace PeerInterface
             }
         }
 
-        private void Connect(IPEndPoint audioEP, int deviceID, int bitRate, int bitDepth)
+        public void StartAudioListener(int deviceID, int bitRate, int bitDepth)
         {
             sourcestream = new WaveIn();
             sourcestream.BufferMilliseconds = 50;
             sourcestream.DeviceNumber = deviceID;
             sourcestream.WaveFormat = new WaveFormat(bitRate, bitDepth, WaveIn.GetCapabilities(deviceID).Channels);
             sourcestream.DataAvailable += sourcestream_DataAvailable;
+
+            Thread audioThread = new Thread(new ThreadStart(AudioListener));
+            audioThread.Start();
+        }
+
+        private void Connect(IPEndPoint audioEP)
+        {
             sourcestream.StartRecording();
 
             udpSender = new UdpClient();
-
             udpSender.Connect(audioEP);
 
             waveout = new WaveOut();
             waveProvider = new BufferedWaveProvider(sourcestream.WaveFormat);
-
             waveout.Init(waveProvider);
             waveout.Play();
         }
@@ -71,20 +78,27 @@ namespace PeerInterface
 
         public void Stop()
         {
-            udpSender.Close();
-            udpReceiver.Close();
+            try
+            {
+                udpSender.Close();
+                udpReceiver.Close();
 
-            if (waveout != null)
-            {
-                waveout.Stop();
-                waveout.Dispose();
-                waveout = null;
+                if (waveout != null)
+                {
+                    waveout.Stop();
+                    waveout.Dispose();
+                    waveout = null;
+                }
+                if (sourcestream != null)
+                {
+                    sourcestream.StopRecording();
+                    sourcestream.Dispose();
+                    sourcestream = null;
+                }
             }
-            if (sourcestream != null)
+            catch(Exception ex)
             {
-                sourcestream.StopRecording();
-                sourcestream.Dispose();
-                sourcestream = null;
+                MessageBox.Show(ex.ToString());
             }
         }
 

@@ -43,10 +43,6 @@ namespace PeerInterface
 
             // List input devices on form load
             GetInputDevices();
-
-            // Start the listener on form load
-            Thread audioThread = new Thread(AudioListener);
-            audioThread.Start();
             /*
             Stop audio section
             */
@@ -391,7 +387,7 @@ namespace PeerInterface
                 Btn_Start.Enabled = false;
                 Btn_Stop.Enabled = true;
 
-                voice.Start(LstView_Peers.SelectedItems.ToString(), Txt_ServPort.Text, CmbBox_SampleRate.Text, CmbBox_BitDepth.Text, LstView_Devices.SelectedItems[0].Index);
+                voice.Start(LstView_Peers.SelectedItems[0].Text, Txt_ServPort.Text);
             }
         }
 
@@ -407,6 +403,18 @@ namespace PeerInterface
         {
             Btn_Stop_Click_1(sender, e);
             this.Close();
+        }
+
+        private void Btn_StartAudioList_Click(object sender, EventArgs e)
+        {
+            Voice voice = new Voice();
+            int sampleRate = int.Parse(CmbBox_SampleRate.Text);
+            int bitDepth = int.Parse(CmbBox_BitDepth.Text);
+
+            voice.StartAudioListener(LstView_Devices.SelectedItems[0].Index, sampleRate, bitDepth);
+
+            Btn_StartAudioList.Text = "Listening";
+            Btn_StartAudioList.BackColor = System.Drawing.Color.Green;
         }
 
         private void GetInputDevices()
