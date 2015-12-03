@@ -75,6 +75,7 @@
             this.Txt_Address = new System.Windows.Forms.TextBox();
             this.commPage = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Btn_StartAudioList = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.Txt_ServAddress = new System.Windows.Forms.TextBox();
@@ -88,7 +89,7 @@
             this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
             this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
             this.Btn_FriendRequest = new System.Windows.Forms.Button();
-            this.Btn_StartAudioList = new System.Windows.Forms.Button();
+            this.Cmb_InputDevices = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -570,6 +571,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox1.Controls.Add(this.Cmb_InputDevices);
             this.groupBox1.Controls.Add(this.Btn_StartAudioList);
             this.groupBox1.Controls.Add(this.label16);
             this.groupBox1.Controls.Add(this.label17);
@@ -588,6 +590,16 @@
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Voice Client";
+            // 
+            // Btn_StartAudioList
+            // 
+            this.Btn_StartAudioList.Location = new System.Drawing.Point(210, 14);
+            this.Btn_StartAudioList.Name = "Btn_StartAudioList";
+            this.Btn_StartAudioList.Size = new System.Drawing.Size(128, 23);
+            this.Btn_StartAudioList.TabIndex = 30;
+            this.Btn_StartAudioList.Text = "Audio Listener";
+            this.Btn_StartAudioList.UseVisualStyleBackColor = true;
+            this.Btn_StartAudioList.Click += new System.EventHandler(this.Btn_StartAudioList_Click);
             // 
             // label16
             // 
@@ -725,15 +737,13 @@
             this.Btn_FriendRequest.UseVisualStyleBackColor = false;
             this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
             // 
-            // Btn_StartAudioList
+            // Cmb_InputDevices
             // 
-            this.Btn_StartAudioList.Location = new System.Drawing.Point(210, 14);
-            this.Btn_StartAudioList.Name = "Btn_StartAudioList";
-            this.Btn_StartAudioList.Size = new System.Drawing.Size(128, 23);
-            this.Btn_StartAudioList.TabIndex = 30;
-            this.Btn_StartAudioList.Text = "Audio Listener";
-            this.Btn_StartAudioList.UseVisualStyleBackColor = true;
-            this.Btn_StartAudioList.Click += new System.EventHandler(this.Btn_StartAudioList_Click);
+            this.Cmb_InputDevices.FormattingEnabled = true;
+            this.Cmb_InputDevices.Location = new System.Drawing.Point(6, 73);
+            this.Cmb_InputDevices.Name = "Cmb_InputDevices";
+            this.Cmb_InputDevices.Size = new System.Drawing.Size(121, 21);
+            this.Cmb_InputDevices.TabIndex = 31;
             // 
             // Form1
             // 
@@ -824,6 +834,7 @@
         private System.Windows.Forms.TextBox Txt_ServAddress;
         private System.Windows.Forms.TextBox Txt_ServPort;
         private System.Windows.Forms.Button Btn_StartAudioList;
+        private System.Windows.Forms.ComboBox Cmb_InputDevices;
     }
 }
 

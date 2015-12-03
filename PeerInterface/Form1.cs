@@ -376,6 +376,7 @@ namespace PeerInterface
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
+            /*
             // Return if no items are selected
             if (LstView_Devices.SelectedItems.Count == 0)
             {
@@ -387,13 +388,23 @@ namespace PeerInterface
                 Btn_Start.Enabled = false;
                 Btn_Stop.Enabled = true;
 
-                string peerAddress = LstView_Peers.SelectedItems[0].Text;
-                int bitRate = int.Parse(CmbBox_SampleRate.SelectedText.ToString());
-                int bitDepth = int.Parse(CmbBox_BitDepth.SelectedText.ToString());
-                int deviceID = int.Parse(LstView_Devices.SelectedItems[0].Text);
+                string peerAddress = Txt_ServAddress.Text;
+                int bitRate = int.Parse(CmbBox_SampleRate.Text);
+                int bitDepth = int.Parse(CmbBox_BitDepth.Text);
+                int deviceID = int.Parse(Cmb_InputDevices.Text);
 
                 voice.Start(peerAddress, deviceID, bitRate, bitDepth);
-            }
+            }*/
+            // Disable the start button and enable the stop button
+            Btn_Start.Enabled = false;
+            Btn_Stop.Enabled = true;
+
+            string peerAddress = Txt_ServAddress.Text;
+            int bitRate = int.Parse(CmbBox_SampleRate.Text);
+            int bitDepth = int.Parse(CmbBox_BitDepth.Text);
+            int deviceID = Cmb_InputDevices.SelectedIndex;
+
+            voice.Start(peerAddress, deviceID, bitRate, bitDepth);
         }
 
         private void Btn_Stop_Click_1(object sender, EventArgs e)
@@ -419,6 +430,7 @@ namespace PeerInterface
             Btn_StartAudioList.BackColor = System.Drawing.Color.Green;
         }
 
+        /*
         private void GetInputDevices()
         {
             // Get information about connected devices
@@ -436,6 +448,20 @@ namespace PeerInterface
                 ListViewItem item = new ListViewItem(device.ProductName);
                 item.SubItems.Add(new ListViewItem.ListViewSubItem(item, device.Channels.ToString()));
                 LstView_Devices.Items.Add(item);
+            }
+        }
+        */
+        private void GetInputDevices()
+        {
+            for (int i = 0; i < WaveIn.DeviceCount; i++)
+            {
+                var capabilities = WaveIn.GetCapabilities(i);
+                Cmb_InputDevices.Items.Add(capabilities.ProductName);
+            }
+
+            if (Cmb_InputDevices.Items.Count > 0)
+            {
+                Cmb_InputDevices.SelectedIndex = 0;
             }
         }
     }
