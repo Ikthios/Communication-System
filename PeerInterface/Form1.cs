@@ -15,7 +15,6 @@ namespace PeerInterface
         // Global variables
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         UdpClient peerReceiver;
         IPEndPoint hostEP, listenEP;
         // Create sender and listener threads
@@ -154,11 +153,58 @@ namespace PeerInterface
         {
             try
             {
-                IPEndPoint friendEP = new IPEndPoint(IPAddress.Parse(Txt_RegServAddr.Text), 8000);
-                string friend = LstView_Peers.SelectedItems.ToString();
+                // Need "ADD,my username, my IP, friend username, friend IP
+                //string friend = LstView_Peers.SelectedItems.ToString();
+                string friend = Txt_MyUsername.Text + "," + Txt_MyAddress.Text +
+                    "," + Txt_FriendUsername.Text + "," + Txt_FriendAddress.Text;
                 string friendRequest = "ADD," + friend;
+                SendRequest(friendRequest);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void Btn_AcceptRequest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // "ACCEPT,my username, friend username
+                string accept = Txt_MyUsername.Text + "," + Txt_MyAddress.Text +
+                    "," + Txt_FriendUsername.Text + "," + Txt_FriendAddress.Text;
+                string acceptRequest = "ACCEPT," + accept;
+                SendRequest(acceptRequest);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void Btn_RejectRequest_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // "REJECT,my username, my IP, friend username, friend IP
+                string reject = Txt_MyUsername.Text + "," + Txt_FriendUsername.Text;
+                string rejectRequest = "REJECT," + reject;
+                SendRequest(rejectRequest);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void SendRequest(string request)
+        {
+            try
+            {
+                Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint friendEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 8000);
                 friendSocket.Connect(friendEP);
-                friendSocket.Send(Encoding.ASCII.GetBytes(friendRequest));
+                friendSocket.Send(Encoding.ASCII.GetBytes(request));
 
                 byte[] buffer = new byte[1500];
                 string dataString = "";
@@ -168,12 +214,16 @@ namespace PeerInterface
                     dataString += Convert.ToChar(buffer[i]);
                 }
                 Txt_FriendSuccess.Text = dataString;
+                friendSocket.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
         }
+
+
+
         /*
         This is the login feature for the peer interface. It will start a new
         thread which will attempt to connect to the login server and retreive
@@ -184,8 +234,9 @@ namespace PeerInterface
         {
             Thread loginThread = new Thread(new ThreadStart(Login));
             Thread friendThread = new Thread(new ThreadStart(GetFriendList));
-            loginThread.Start();
+            //loginThread.Start();
 
+            /*
             while (true)
             {
                 if (loggedIn)
@@ -197,6 +248,37 @@ namespace PeerInterface
                 {
                     Debug.WriteLine("User not logged in yet.");
                 }
+            }
+            */
+            string username = Txt_Username.Text;
+            string password = Txt_Password.Text;
+            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
+            string loginMessage = username + ',' + password + ',' + GetIpAddress() + ',';
+
+            try
+            {
+                // Login and get user information
+                loginSocket.Connect(loginEP);
+                loginSocket.Send(Encoding.ASCII.GetBytes(loginMessage));
+
+                byte[] buffer = new byte[1500];
+                string dataString = "";
+                loginSocket.Receive(buffer);
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    dataString += Convert.ToChar(buffer[i]);
+                }
+                string[] tokens = dataString.Split(',');
+                if (tokens[0].Equals("SUCCESS"))
+                    Btn_Connect.Enabled = false;
+                Txt_AccountInfo.Text = dataString;
+
+                loggedIn = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -234,10 +316,14 @@ namespace PeerInterface
             }
         }
 
+        private void Btn_GetFriendList_Click(object sender, EventArgs e)
+        {
+            GetFriendList();
+        }
+
         private void GetFriendList()
         {
-            string username = Txt_Username.Text;
-            string password = Txt_Password.Text;
+            string username = Txt_MyUsername.Text;
             try
             {
                 Socket friendSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -245,6 +331,10 @@ namespace PeerInterface
                 friendSocket.Connect(friendEP);
                 // Send username and get friend listing
                 friendSocket.Send(Encoding.ASCII.GetBytes(username));
+
+                //LstView_Friends.Clear();
+
+                // Get friend list back
                 byte[] friendBuffer = new byte[1500];
                 string dataString = "";
                 friendSocket.Receive(friendBuffer);
@@ -257,6 +347,8 @@ namespace PeerInterface
                 {
                     LstView_Friends.Items.Add(friend);
                 }
+
+                friendSocket.Close();
             }
             catch (Exception ex)
             {
@@ -278,18 +370,28 @@ namespace PeerInterface
             string username = Txt_Username.Text;
             string message = "username," + GetIpAddress();
             byte[] byteMessage = Encoding.ASCII.GetBytes(message);
-            hostEP = new IPEndPoint(IPAddress.Broadcast, 6500);
+            //hostEP = new IPEndPoint(IPAddress.Broadcast, 6500);
+            hostEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 12000);
 
 
             // Loop the broadcast signal
             try
             {
+                /*
                 while (true)
                 {
                     socket.Connect(hostEP);
                     socket.Send(Encoding.ASCII.GetBytes(message));
                     Debug.WriteLine("Send message: " + message);
                     Thread.Sleep(5000);
+                }
+                */
+                while (true)
+                {
+                    socket.Connect(hostEP);
+                    socket.Send(Encoding.ASCII.GetBytes(message));
+                    Debug.WriteLine("Send message: " + message);
+                    Thread.Sleep(1000);
                 }
             }
             catch (Exception ex)
@@ -302,8 +404,9 @@ namespace PeerInterface
         // This will listen to the network for peer information
         private void UdpListener()
         {
-            peerReceiver = new UdpClient(6500);
-            listenEP = new IPEndPoint(IPAddress.Any, 6500);
+            peerReceiver = new UdpClient();
+            listenEP = new IPEndPoint(IPAddress.Any, 12001);
+            peerReceiver.Client.Bind(listenEP);
             string incomingMessage;
             byte[] dataBytes;
 
@@ -329,9 +432,15 @@ namespace PeerInterface
         // This will allow the UdpListener thread to access the main forms listview element
         private void AddListItemMethod()
         {
-            int count = 0;
-            string peerString = getPeerString();
+            //int count = 0;
+            string[] peerString = getPeerString().Split(',');
 
+            LstView_Peers.Items.Clear();
+            foreach(string element in peerString)
+            {
+                LstView_Peers.Items.Add(element);
+            }
+            /*
             foreach(string element in peerStringList)
             {
                 if (element.Equals(peerString))
@@ -339,7 +448,7 @@ namespace PeerInterface
                     count++;
                 }
             }
-            
+
             if (count == 0)
             {
                 peerStringList.Add(peerString);
@@ -349,6 +458,7 @@ namespace PeerInterface
             {
                 Debug.WriteLine(peerString + " already in peerStringList.");
             }
+            */
         }
 
         // Get peer IP address
@@ -461,7 +571,7 @@ namespace PeerInterface
                 LstView_Devices.Items.Add(item);
             }
         }
-        
+
         private void GetInputDevices()
         {
             for (int i = 0; i < WaveIn.DeviceCount; i++)

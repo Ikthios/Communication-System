@@ -74,6 +74,19 @@
             this.Btn_Connect = new System.Windows.Forms.Button();
             this.Txt_Address = new System.Windows.Forms.TextBox();
             this.commPage = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.Btn_RejectRequest = new System.Windows.Forms.Button();
+            this.Btn_AcceptRequest = new System.Windows.Forms.Button();
+            this.Txt_FriendUsername = new System.Windows.Forms.TextBox();
+            this.Txt_FriendAddress = new System.Windows.Forms.TextBox();
+            this.Txt_MyUsername = new System.Windows.Forms.TextBox();
+            this.Txt_MyAddress = new System.Windows.Forms.TextBox();
+            this.Btn_FriendRequest = new System.Windows.Forms.Button();
+            this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Cmb_InputDevices = new System.Windows.Forms.ComboBox();
             this.Btn_StartAudioList = new System.Windows.Forms.Button();
@@ -83,13 +96,12 @@
             this.Txt_ServPort = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
+            this.Btn_Stop = new System.Windows.Forms.Button();
             this.Btn_Start = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
-            this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
-            this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
-            this.Btn_FriendRequest = new System.Windows.Forms.Button();
             this.Btn_Exit = new System.Windows.Forms.Button();
-            this.Btn_Stop = new System.Windows.Forms.Button();
+            this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
+            this.Btn_GetFriendList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -99,6 +111,7 @@
             this.registerPage.SuspendLayout();
             this.loginPage.SuspendLayout();
             this.commPage.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -551,15 +564,13 @@
             this.Txt_Address.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Txt_Address.Location = new System.Drawing.Point(6, 240);
             this.Txt_Address.Name = "Txt_Address";
-            this.Txt_Address.ReadOnly = true;
             this.Txt_Address.Size = new System.Drawing.Size(183, 22);
             this.Txt_Address.TabIndex = 3;
             // 
             // commPage
             // 
+            this.commPage.Controls.Add(this.groupBox2);
             this.commPage.Controls.Add(this.groupBox1);
-            this.commPage.Controls.Add(this.Txt_FriendSuccess);
-            this.commPage.Controls.Add(this.Btn_FriendRequest);
             this.commPage.Location = new System.Drawing.Point(4, 22);
             this.commPage.Name = "commPage";
             this.commPage.Padding = new System.Windows.Forms.Padding(3);
@@ -567,6 +578,131 @@
             this.commPage.TabIndex = 1;
             this.commPage.Text = "Communicate";
             this.commPage.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.Btn_GetFriendList);
+            this.groupBox2.Controls.Add(this.label21);
+            this.groupBox2.Controls.Add(this.label20);
+            this.groupBox2.Controls.Add(this.label19);
+            this.groupBox2.Controls.Add(this.label18);
+            this.groupBox2.Controls.Add(this.Btn_RejectRequest);
+            this.groupBox2.Controls.Add(this.Btn_AcceptRequest);
+            this.groupBox2.Controls.Add(this.Txt_FriendUsername);
+            this.groupBox2.Controls.Add(this.Txt_FriendAddress);
+            this.groupBox2.Controls.Add(this.Txt_MyUsername);
+            this.groupBox2.Controls.Add(this.Txt_MyAddress);
+            this.groupBox2.Controls.Add(this.Btn_FriendRequest);
+            this.groupBox2.Controls.Add(this.Txt_FriendSuccess);
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(344, 161);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Friends";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(112, 97);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(87, 13);
+            this.label21.TabIndex = 12;
+            this.label21.Text = "Friend Username";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(112, 71);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(49, 13);
+            this.label20.TabIndex = 11;
+            this.label20.Text = "Friend IP";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(112, 45);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(72, 13);
+            this.label19.TabIndex = 10;
+            this.label19.Text = "My Username";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(112, 19);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(34, 13);
+            this.label18.TabIndex = 9;
+            this.label18.Text = "My IP";
+            // 
+            // Btn_RejectRequest
+            // 
+            this.Btn_RejectRequest.Location = new System.Drawing.Point(222, 132);
+            this.Btn_RejectRequest.Name = "Btn_RejectRequest";
+            this.Btn_RejectRequest.Size = new System.Drawing.Size(75, 23);
+            this.Btn_RejectRequest.TabIndex = 8;
+            this.Btn_RejectRequest.Text = "Reject";
+            this.Btn_RejectRequest.UseVisualStyleBackColor = true;
+            this.Btn_RejectRequest.Click += new System.EventHandler(this.Btn_RejectRequest_Click);
+            // 
+            // Btn_AcceptRequest
+            // 
+            this.Btn_AcceptRequest.Location = new System.Drawing.Point(141, 132);
+            this.Btn_AcceptRequest.Name = "Btn_AcceptRequest";
+            this.Btn_AcceptRequest.Size = new System.Drawing.Size(75, 23);
+            this.Btn_AcceptRequest.TabIndex = 7;
+            this.Btn_AcceptRequest.Text = "Accept";
+            this.Btn_AcceptRequest.UseVisualStyleBackColor = true;
+            this.Btn_AcceptRequest.Click += new System.EventHandler(this.Btn_AcceptRequest_Click);
+            // 
+            // Txt_FriendUsername
+            // 
+            this.Txt_FriendUsername.Location = new System.Drawing.Point(6, 94);
+            this.Txt_FriendUsername.Name = "Txt_FriendUsername";
+            this.Txt_FriendUsername.Size = new System.Drawing.Size(100, 20);
+            this.Txt_FriendUsername.TabIndex = 5;
+            // 
+            // Txt_FriendAddress
+            // 
+            this.Txt_FriendAddress.Location = new System.Drawing.Point(6, 68);
+            this.Txt_FriendAddress.Name = "Txt_FriendAddress";
+            this.Txt_FriendAddress.Size = new System.Drawing.Size(100, 20);
+            this.Txt_FriendAddress.TabIndex = 4;
+            // 
+            // Txt_MyUsername
+            // 
+            this.Txt_MyUsername.Location = new System.Drawing.Point(6, 42);
+            this.Txt_MyUsername.Name = "Txt_MyUsername";
+            this.Txt_MyUsername.Size = new System.Drawing.Size(100, 20);
+            this.Txt_MyUsername.TabIndex = 3;
+            // 
+            // Txt_MyAddress
+            // 
+            this.Txt_MyAddress.Location = new System.Drawing.Point(6, 16);
+            this.Txt_MyAddress.Name = "Txt_MyAddress";
+            this.Txt_MyAddress.Size = new System.Drawing.Size(100, 20);
+            this.Txt_MyAddress.TabIndex = 2;
+            // 
+            // Btn_FriendRequest
+            // 
+            this.Btn_FriendRequest.BackColor = System.Drawing.SystemColors.Control;
+            this.Btn_FriendRequest.Location = new System.Drawing.Point(3, 132);
+            this.Btn_FriendRequest.Name = "Btn_FriendRequest";
+            this.Btn_FriendRequest.Size = new System.Drawing.Size(132, 23);
+            this.Btn_FriendRequest.TabIndex = 0;
+            this.Btn_FriendRequest.Text = "Send Friend Request";
+            this.Btn_FriendRequest.UseVisualStyleBackColor = false;
+            this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
+            // 
+            // Txt_FriendSuccess
+            // 
+            this.Txt_FriendSuccess.Location = new System.Drawing.Point(206, 16);
+            this.Txt_FriendSuccess.Name = "Txt_FriendSuccess";
+            this.Txt_FriendSuccess.ReadOnly = true;
+            this.Txt_FriendSuccess.Size = new System.Drawing.Size(132, 20);
+            this.Txt_FriendSuccess.TabIndex = 1;
             // 
             // groupBox1
             // 
@@ -584,7 +720,7 @@
             this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.Btn_Exit);
             this.groupBox1.Controls.Add(this.CmbBox_SampleRate);
-            this.groupBox1.Location = new System.Drawing.Point(6, 61);
+            this.groupBox1.Location = new System.Drawing.Point(3, 170);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(344, 189);
             this.groupBox1.TabIndex = 2;
@@ -665,6 +801,16 @@
             this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
             this.CmbBox_BitDepth.TabIndex = 24;
             // 
+            // Btn_Stop
+            // 
+            this.Btn_Stop.Location = new System.Drawing.Point(210, 72);
+            this.Btn_Stop.Name = "Btn_Stop";
+            this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Stop.TabIndex = 20;
+            this.Btn_Stop.Text = "Disconnect";
+            this.Btn_Stop.UseVisualStyleBackColor = true;
+            this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
+            // 
             // Btn_Start
             // 
             this.Btn_Start.Location = new System.Drawing.Point(210, 43);
@@ -684,6 +830,16 @@
             this.label15.Size = new System.Drawing.Size(47, 15);
             this.label15.TabIndex = 23;
             this.label15.Text = "Bit Rate";
+            // 
+            // Btn_Exit
+            // 
+            this.Btn_Exit.Location = new System.Drawing.Point(210, 101);
+            this.Btn_Exit.Name = "Btn_Exit";
+            this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Exit.TabIndex = 21;
+            this.Btn_Exit.Text = "Exit";
+            this.Btn_Exit.UseVisualStyleBackColor = true;
+            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
             // 
             // CmbBox_SampleRate
             // 
@@ -706,44 +862,15 @@
             this.CmbBox_SampleRate.Size = new System.Drawing.Size(128, 21);
             this.CmbBox_SampleRate.TabIndex = 22;
             // 
-            // Txt_FriendSuccess
+            // Btn_GetFriendList
             // 
-            this.Txt_FriendSuccess.Location = new System.Drawing.Point(6, 35);
-            this.Txt_FriendSuccess.Name = "Txt_FriendSuccess";
-            this.Txt_FriendSuccess.ReadOnly = true;
-            this.Txt_FriendSuccess.Size = new System.Drawing.Size(132, 20);
-            this.Txt_FriendSuccess.TabIndex = 1;
-            // 
-            // Btn_FriendRequest
-            // 
-            this.Btn_FriendRequest.BackColor = System.Drawing.SystemColors.Control;
-            this.Btn_FriendRequest.Location = new System.Drawing.Point(6, 6);
-            this.Btn_FriendRequest.Name = "Btn_FriendRequest";
-            this.Btn_FriendRequest.Size = new System.Drawing.Size(132, 23);
-            this.Btn_FriendRequest.TabIndex = 0;
-            this.Btn_FriendRequest.Text = "Send Friend Request";
-            this.Btn_FriendRequest.UseVisualStyleBackColor = false;
-            this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
-            // 
-            // Btn_Exit
-            // 
-            this.Btn_Exit.Location = new System.Drawing.Point(210, 101);
-            this.Btn_Exit.Name = "Btn_Exit";
-            this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
-            this.Btn_Exit.TabIndex = 21;
-            this.Btn_Exit.Text = "Exit";
-            this.Btn_Exit.UseVisualStyleBackColor = true;
-            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
-            // 
-            // Btn_Stop
-            // 
-            this.Btn_Stop.Location = new System.Drawing.Point(210, 72);
-            this.Btn_Stop.Name = "Btn_Stop";
-            this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
-            this.Btn_Stop.TabIndex = 20;
-            this.Btn_Stop.Text = "Disconnect";
-            this.Btn_Stop.UseVisualStyleBackColor = true;
-            this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
+            this.Btn_GetFriendList.Location = new System.Drawing.Point(206, 42);
+            this.Btn_GetFriendList.Name = "Btn_GetFriendList";
+            this.Btn_GetFriendList.Size = new System.Drawing.Size(132, 23);
+            this.Btn_GetFriendList.TabIndex = 13;
+            this.Btn_GetFriendList.Text = "Get Friend List";
+            this.Btn_GetFriendList.UseVisualStyleBackColor = true;
+            this.Btn_GetFriendList.Click += new System.EventHandler(this.Btn_GetFriendList_Click);
             // 
             // Form1
             // 
@@ -764,7 +891,8 @@
             this.loginPage.ResumeLayout(false);
             this.loginPage.PerformLayout();
             this.commPage.ResumeLayout(false);
-            this.commPage.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -835,6 +963,18 @@
         private System.Windows.Forms.ComboBox Cmb_InputDevices;
         private System.Windows.Forms.Button Btn_Stop;
         private System.Windows.Forms.Button Btn_Exit;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Button Btn_RejectRequest;
+        private System.Windows.Forms.Button Btn_AcceptRequest;
+        private System.Windows.Forms.TextBox Txt_FriendUsername;
+        private System.Windows.Forms.TextBox Txt_FriendAddress;
+        private System.Windows.Forms.TextBox Txt_MyUsername;
+        private System.Windows.Forms.TextBox Txt_MyAddress;
+        private System.Windows.Forms.Button Btn_GetFriendList;
     }
 }
 
