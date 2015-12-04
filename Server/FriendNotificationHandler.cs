@@ -32,7 +32,7 @@ namespace Server
                     IPAddress sendAddress = IPAddress.Parse(request.IP);
                     IPEndPoint sendEnpoint = new IPEndPoint(sendAddress, sendingPort);
 
-                    string message = request.Username + ",";
+                    string message = request.Username + " " + request.UserIP + ",";
                     byte[] converted = Encoding.ASCII.GetBytes(message);
 
                     try

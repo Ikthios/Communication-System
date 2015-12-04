@@ -124,6 +124,9 @@ namespace Server
 
             ActiveUserListener active = new ActiveUserListener(12000);
             active.StartUDPListener();
+
+            FriendNotificationHandler notive = new FriendNotificationHandler();
+            notive.startFriendNotificationHandler();
         }
     }
 } 

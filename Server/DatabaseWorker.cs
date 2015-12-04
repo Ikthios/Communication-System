@@ -72,7 +72,7 @@ namespace Server
         }
 
 
-        public void AddUser(User user)
+        public bool AddUser(User user)
         {
             try
             {
@@ -108,45 +108,63 @@ namespace Server
 
                     command.ExecuteNonQuery();
                     connection.Close();
-                    //GARBAGE
+
+                    return true;
                 }
             }
             catch (Exception e)
             {
-
+                return false;
             }
         }
 
-        public void AddFriend(User user, User friend)
+        public bool AddFriend(User user, User friend)
         {
-            try
+            bool success = true;
+            bool alreadyFriends = false;
+            List<String> value = getFriendsList(user.Username);
+            foreach(var name in value)
             {
-                using (SqlConnection connection = new SqlConnection(conString))
+                string[] tokens = name.Split(' ');
+                if (tokens[0].Equals(friend.Username))
+                    alreadyFriends = true;
+            }
+            if (!alreadyFriends)
+            {
+                try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("INSERT INTO Friends (Username, FriendUsername, FriendIP, UserIP) VALUES "
-                        + "(@Username, @FriendUsername, @FriendIP, @UserIP)", connection);
+                    using (SqlConnection connection = new SqlConnection(conString))
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("INSERT INTO Friends (Username, FriendUsername, FriendIP, UserIP) VALUES "
+                            + "(@Username, @FriendUsername, @FriendIP, @UserIP)", connection);
 
-                    command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
-                    command.Parameters["@Username"].Value = user.Username;
+                        command.Parameters.Add("@Username", SqlDbType.NVarChar, 50);
+                        command.Parameters["@Username"].Value = user.Username;
 
-                    command.Parameters.Add("@FriendUsername", SqlDbType.NVarChar, 50);
-                    command.Parameters["@FriendUsername"].Value = friend.Username;
+                        command.Parameters.Add("@FriendUsername", SqlDbType.NVarChar, 50);
+                        command.Parameters["@FriendUsername"].Value = friend.Username;
 
-                    command.Parameters.Add("@FriendIP", SqlDbType.NVarChar, 50);
-                    command.Parameters["@FriendIP"].Value = friend.IP;
+                        command.Parameters.Add("@FriendIP", SqlDbType.NVarChar, 50);
+                        command.Parameters["@FriendIP"].Value = friend.IP;
 
-                    command.Parameters.Add("@UserIP", SqlDbType.NVarChar, 50);
-                    command.Parameters["@UserIP"].Value = user.IP;
+                        command.Parameters.Add("@UserIP", SqlDbType.NVarChar, 50);
+                        command.Parameters["@UserIP"].Value = user.IP;
 
-                    command.ExecuteNonQuery();
-                    connection.Close();
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                }
+                catch (Exception e)
+                {
+
                 }
             }
-            catch (Exception e)
+            else
             {
-
+                success = false;
             }
+            return success;
         }
 
         public void ClearFriendsTable()
@@ -236,7 +254,7 @@ namespace Server
                 using (SqlConnection connection = new SqlConnection(conString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("SELECT Username, FriendUsername, FriendIP FROM Friends WHERE Accepted = 0", connection);
+                    SqlCommand command = new SqlCommand("SELECT Username, UserIP, FriendUsername, FriendIP FROM Friends WHERE Accepted = 0", connection);
 
                     SqlDataReader reader = command.ExecuteReader();
 
@@ -246,8 +264,9 @@ namespace Server
                         {
                             PendingRequest temp = new PendingRequest();
                             temp.Username = reader[0].ToString();
-                            temp.FriendUsername = reader[1].ToString();
-                            temp.IP = reader[2].ToString();
+                            temp.IP = reader[1].ToString();
+                            temp.FriendUsername = reader[2].ToString();
+                            temp.IP = reader[3].ToString();
                             values.Add(temp);
                         }
                         return values;
@@ -427,8 +446,9 @@ namespace Server
             }
         }
 
-        public void setToAccept(User user, User friend)
+        public bool setToAccept(User user, User friend)
         {
+            bool success = true;
             try
             {
                 using (SqlConnection connection = new SqlConnection(conString))
@@ -452,7 +472,7 @@ namespace Server
 
             }
 
-            AddFriend(user, friend);
+            success = AddFriend(user, friend);
 
             try
             {
@@ -476,6 +496,7 @@ namespace Server
             {
 
             }
+            return success;
         }
     }
 }

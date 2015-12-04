@@ -59,15 +59,35 @@ namespace Server
         public void addUser(string[] info)
         {
             int byteCount;
+            bool validUserDate = true;
+            bool valid = false;
             User temp = new User(info);
-            worker.AddUser(temp);
+            if(temp.DateOfBirth == null)
+            {
+                validUserDate = false;
+            }
+            if(validUserDate)
+            {
+                valid = worker.AddUser(temp);
+            }
+            
+            if (valid == true)
+            {
+                string success = "SUCCESS,";
+                byte[] message = encoding.GetBytes(success);
 
-            string success = "SUCCESS";
-            byte[] message = encoding.GetBytes(success);
+                byteCount = clientSocket.Send(message);
 
-            byteCount = clientSocket.Send(message);
+                clientSocket.Close();
+            }
+            else
+            {
+                string failed = "FAILED, Bad registration";
+                byte[] message = encoding.GetBytes(failed);
 
-            clientSocket.Close();
+                byteCount = clientSocket.Send(message);
+                clientSocket.Close();
+            }
         }
     }
 }

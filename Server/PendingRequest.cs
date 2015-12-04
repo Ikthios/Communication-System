@@ -9,21 +9,30 @@ namespace Server
     class PendingRequest
     {
         string username;
+        string userIP;
         string friendUsername;
         string ip;
 
         public PendingRequest()
         {
             Username = "";
+            UserIP = "";
             FriendUsername = "";
             IP = "";
         }
 
-        public PendingRequest(string username, string friendUsername, string ip)
+        public PendingRequest(string username, string userIP, string friendUsername, string ip)
         {
             Username = username;
+            UserIP = userIP;
             FriendUsername = friendUsername;
             IP = ip;
+        }
+
+        public string UserIP
+        {
+            get { return userIP; }
+            set { userIP = value; }
         }
 
         public string Username

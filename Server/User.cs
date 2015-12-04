@@ -49,7 +49,13 @@ namespace Server
             Email = info[3];
             Address = info[4];
             Phone = info[5];
-            DateOfBirth = new DateTime(Int32.Parse(info[6]), Int32.Parse(info[7]), Int32.Parse(info[8]));
+            try {
+                DateOfBirth = new DateTime(Int32.Parse(info[6]), Int32.Parse(info[7]), Int32.Parse(info[8]));
+            }
+            catch(Exception e)
+            {
+
+            }
             IP = info[9];
         }
 

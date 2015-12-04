@@ -79,13 +79,24 @@ namespace Server
                 friend.Username = package[3];
                 friend.IP = package[4];
 
-                worker.setToAccept(user, friend);
+                bool success = worker.setToAccept(user, friend);
 
-                string info = "Friend request accepted.";
-                byte[] message = encoding.GetBytes(info);
+                if (success)
+                {
+                    string info = "Friend request accepted.";
+                    byte[] message = encoding.GetBytes(info);
 
-                byteCount = clientSocket.Send(message);
-                clientSocket.Close();
+                    byteCount = clientSocket.Send(message);
+                    clientSocket.Close();
+                }
+                else
+                {
+                    string info = "Friend accept invalid";
+                    byte[] message = encoding.GetBytes(info);
+
+                    byteCount = clientSocket.Send(message);
+                    clientSocket.Close();
+                }
             }
 
             if(package[0] == "REJECT")
