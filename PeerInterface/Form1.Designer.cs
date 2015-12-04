@@ -75,6 +75,7 @@
             this.Txt_Address = new System.Windows.Forms.TextBox();
             this.commPage = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Cmb_InputDevices = new System.Windows.Forms.ComboBox();
             this.Btn_StartAudioList = new System.Windows.Forms.Button();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -82,14 +83,13 @@
             this.Txt_ServPort = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.CmbBox_BitDepth = new System.Windows.Forms.ComboBox();
-            this.Btn_Stop = new System.Windows.Forms.Button();
             this.Btn_Start = new System.Windows.Forms.Button();
             this.label15 = new System.Windows.Forms.Label();
-            this.Btn_Exit = new System.Windows.Forms.Button();
             this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
             this.Txt_FriendSuccess = new System.Windows.Forms.TextBox();
             this.Btn_FriendRequest = new System.Windows.Forms.Button();
-            this.Cmb_InputDevices = new System.Windows.Forms.ComboBox();
+            this.Btn_Exit = new System.Windows.Forms.Button();
+            this.Btn_Stop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -591,6 +591,14 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Voice Client";
             // 
+            // Cmb_InputDevices
+            // 
+            this.Cmb_InputDevices.FormattingEnabled = true;
+            this.Cmb_InputDevices.Location = new System.Drawing.Point(6, 73);
+            this.Cmb_InputDevices.Name = "Cmb_InputDevices";
+            this.Cmb_InputDevices.Size = new System.Drawing.Size(128, 21);
+            this.Cmb_InputDevices.TabIndex = 31;
+            // 
             // Btn_StartAudioList
             // 
             this.Btn_StartAudioList.Location = new System.Drawing.Point(210, 14);
@@ -640,7 +648,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label14.Location = new System.Drawing.Point(140, 52);
+            this.label14.Location = new System.Drawing.Point(140, 49);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(53, 15);
             this.label14.TabIndex = 25;
@@ -656,16 +664,6 @@
             this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
             this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);
             this.CmbBox_BitDepth.TabIndex = 24;
-            // 
-            // Btn_Stop
-            // 
-            this.Btn_Stop.Location = new System.Drawing.Point(210, 72);
-            this.Btn_Stop.Name = "Btn_Stop";
-            this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
-            this.Btn_Stop.TabIndex = 20;
-            this.Btn_Stop.Text = "Disconnect";
-            this.Btn_Stop.UseVisualStyleBackColor = true;
-            this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
             // 
             // Btn_Start
             // 
@@ -686,16 +684,6 @@
             this.label15.Size = new System.Drawing.Size(47, 15);
             this.label15.TabIndex = 23;
             this.label15.Text = "Bit Rate";
-            // 
-            // Btn_Exit
-            // 
-            this.Btn_Exit.Location = new System.Drawing.Point(210, 101);
-            this.Btn_Exit.Name = "Btn_Exit";
-            this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
-            this.Btn_Exit.TabIndex = 21;
-            this.Btn_Exit.Text = "Exit";
-            this.Btn_Exit.UseVisualStyleBackColor = true;
-            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
             // 
             // CmbBox_SampleRate
             // 
@@ -737,13 +725,25 @@
             this.Btn_FriendRequest.UseVisualStyleBackColor = false;
             this.Btn_FriendRequest.Click += new System.EventHandler(this.Btn_FriendRequest_Click);
             // 
-            // Cmb_InputDevices
+            // Btn_Exit
             // 
-            this.Cmb_InputDevices.FormattingEnabled = true;
-            this.Cmb_InputDevices.Location = new System.Drawing.Point(6, 73);
-            this.Cmb_InputDevices.Name = "Cmb_InputDevices";
-            this.Cmb_InputDevices.Size = new System.Drawing.Size(121, 21);
-            this.Cmb_InputDevices.TabIndex = 31;
+            this.Btn_Exit.Location = new System.Drawing.Point(210, 101);
+            this.Btn_Exit.Name = "Btn_Exit";
+            this.Btn_Exit.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Exit.TabIndex = 21;
+            this.Btn_Exit.Text = "Exit";
+            this.Btn_Exit.UseVisualStyleBackColor = true;
+            this.Btn_Exit.Click += new System.EventHandler(this.Btn_Exit_Click);
+            // 
+            // Btn_Stop
+            // 
+            this.Btn_Stop.Location = new System.Drawing.Point(210, 72);
+            this.Btn_Stop.Name = "Btn_Stop";
+            this.Btn_Stop.Size = new System.Drawing.Size(128, 23);
+            this.Btn_Stop.TabIndex = 20;
+            this.Btn_Stop.Text = "Disconnect";
+            this.Btn_Stop.UseVisualStyleBackColor = true;
+            this.Btn_Stop.Click += new System.EventHandler(this.Btn_Stop_Click_1);
             // 
             // Form1
             // 
@@ -824,10 +824,8 @@
         private System.Windows.Forms.ColumnHeader channelColumns;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox CmbBox_BitDepth;
-        private System.Windows.Forms.Button Btn_Stop;
         private System.Windows.Forms.Button Btn_Start;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Button Btn_Exit;
         private System.Windows.Forms.ComboBox CmbBox_SampleRate;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
@@ -835,6 +833,8 @@
         private System.Windows.Forms.TextBox Txt_ServPort;
         private System.Windows.Forms.Button Btn_StartAudioList;
         private System.Windows.Forms.ComboBox Cmb_InputDevices;
+        private System.Windows.Forms.Button Btn_Stop;
+        private System.Windows.Forms.Button Btn_Exit;
     }
 }
 

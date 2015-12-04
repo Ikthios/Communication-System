@@ -28,7 +28,7 @@ namespace PeerInterface
         public SendOutVoice(string destinationIP)
         {
             this.destinationIP = destinationIP;
-            outEP = new IPEndPoint(IPAddress.Parse(destinationIP), 8000);
+            outEP = new IPEndPoint(IPAddress.Parse(destinationIP), 6700);
         }
 
         public void InitializeWaveInEvent()

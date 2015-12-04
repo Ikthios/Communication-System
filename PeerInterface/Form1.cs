@@ -34,15 +34,19 @@ namespace PeerInterface
             */
             // Disable stop button
             Btn_Stop.Enabled = false;
+            Btn_Exit.Enabled = false;
+            CmbBox_BitDepth.Enabled = false;
+            CmbBox_SampleRate.Enabled = false;
 
             // Set default values on form load
             CmbBox_SampleRate.SelectedIndex = 7;
             CmbBox_BitDepth.SelectedIndex = 0;
             Txt_ServAddress.Text = "127.0.0.1";
-            Txt_ServPort.Text = "6000";
+            Txt_ServPort.Text = "6700";
 
             // List input devices on form load
             GetInputDevices();
+            GetInputDevicesList();
             /*
             Stop audio section
             */
@@ -397,7 +401,7 @@ namespace PeerInterface
             }*/
             // Disable the start button and enable the stop button
             Btn_Start.Enabled = false;
-            Btn_Stop.Enabled = true;
+            //Btn_Stop.Enabled = true;
 
             string peerAddress = Txt_ServAddress.Text;
             int bitRate = int.Parse(CmbBox_SampleRate.Text);
@@ -437,8 +441,8 @@ namespace PeerInterface
             Btn_StartAudioList.BackColor = System.Drawing.Color.Green;
         }
 
-        /*
-        private void GetInputDevices()
+        
+        private void GetInputDevicesList()
         {
             // Get information about connected devices
             List<WaveInCapabilities> deviceList = new List<WaveInCapabilities>();
@@ -457,7 +461,7 @@ namespace PeerInterface
                 LstView_Devices.Items.Add(item);
             }
         }
-        */
+        
         private void GetInputDevices()
         {
             for (int i = 0; i < WaveIn.DeviceCount; i++)
