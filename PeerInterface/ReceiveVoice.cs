@@ -13,7 +13,7 @@ namespace PeerInterface
     class ReceiveVoice
     {
         UdpClient udpListener = new UdpClient();
-        IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6000);
+        IPEndPoint listeningEP = new IPEndPoint(IPAddress.Any, 6700);
         BufferedWaveProvider waveProvider = null;
         WaveInEvent sourceStream = null;
         WaveOut waveout = new WaveOut();
