@@ -85,7 +85,7 @@ namespace ServerTester
 
         public void GetFriendList()
         {
-            server = new IPEndPoint(IPAddress.Parse("134.129.51.167"), 9000);
+            server = new IPEndPoint(IPAddress.Parse("10.134.172.46"), 9000);
             regSocket.Connect(server);
 
             string info = "Username";
@@ -141,14 +141,8 @@ namespace ServerTester
         static void Main(string[] args)
         {
             ServerTester temp = new ServerTester();
-            Thread pinger = new Thread(temp.pingActive);
-            pinger.Start();
-
-            Thread receive = new Thread(temp.receiveActivePing);
-            receive.Start();
-
-            temp.AddFriendAdd();
-            temp.AddFriendAccept();
+            temp.GetFriendList();
+            temp.ReceiveReply();
         }
     }
 }

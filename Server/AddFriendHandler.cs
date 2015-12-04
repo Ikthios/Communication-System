@@ -71,6 +71,7 @@ namespace Server
             if(package[0] == "ACCEPT")
             {
                 User user = new User();
+                //user username, user ip, friend username, friend ip
                 user.Username = package[1];
                 user.IP = package[2];
 
