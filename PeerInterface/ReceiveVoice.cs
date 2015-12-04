@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ReceiveVoice
+namespace PeerInterface
 {
     class ReceiveVoice
     {
@@ -45,12 +45,14 @@ namespace ReceiveVoice
             }
         }
 
+        /*
         static void Main(string[] args)
         {
             ReceiveVoice mine = new ReceiveVoice();
             Thread test = new Thread(mine.startListening);
             test.Start();
         }
+        */
     }
 }
 

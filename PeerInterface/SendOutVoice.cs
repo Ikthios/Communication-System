@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using System.Diagnostics;
 using System.Threading;
 
-namespace SendVoice
+namespace PeerInterface
 {
     class SendOutVoice
     {
@@ -63,7 +63,7 @@ namespace SendVoice
             }
         }
 
-
+        /*
         static void Main(string[] args)
         {
             
@@ -71,6 +71,7 @@ namespace SendVoice
             Thread test = new Thread(mine.StartSending);
             test.Start();
         }
+        */
     }
 }
 

@@ -373,7 +373,6 @@ namespace PeerInterface
         work nicely.
         */
         Voice voice = new Voice();
-        Voice2 voice2 = new Voice2();
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
@@ -405,8 +404,9 @@ namespace PeerInterface
             int bitDepth = int.Parse(CmbBox_BitDepth.Text);
             int deviceID = Cmb_InputDevices.SelectedIndex;
 
-            voice.Start(peerAddress, deviceID, bitRate, bitDepth);
-            voice2.Start(peerAddress, deviceID, bitRate, bitDepth);
+            SendOutVoice sov = new SendOutVoice(peerAddress);
+            Thread senderThread = new Thread(new ThreadStart(sov.StartSending));
+            senderThread.Start();
         }
 
         private void Btn_Stop_Click_1(object sender, EventArgs e)
@@ -429,10 +429,9 @@ namespace PeerInterface
             int bitDepth = int.Parse(CmbBox_BitDepth.Text);
             int deviceID = Cmb_InputDevices.SelectedIndex;
 
-            Thread listenerThread = new Thread(new ThreadStart(voice.AudioListener));
-            Thread listener2Thread = new Thread(new ThreadStart(voice2.AudioListener));
+            ReceiveVoice rv = new ReceiveVoice();
+            Thread listenerThread = new Thread(new ThreadStart(rv.startListening));
             listenerThread.Start();
-            listener2Thread.Start();
 
             Btn_StartAudioList.Text = "Listening";
             Btn_StartAudioList.BackColor = System.Drawing.Color.Green;
