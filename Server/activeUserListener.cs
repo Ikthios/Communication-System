@@ -62,7 +62,7 @@ namespace Server
         private static void SetTimer()
         {
             // Create a timer with a twenty second interval.
-            checkTimer = new System.Timers.Timer(2000);
+            checkTimer = new System.Timers.Timer(5000);
             // Hook up the Elapsed event for the timer. 
             checkTimer.Elapsed += OnTimedEvent;
             checkTimer.AutoReset = true;
@@ -108,13 +108,13 @@ namespace Server
                 for(int i = 0; i < localNames.Length; i++)
                 {
                     message += localNames[i];
-                    message += ',';
+                    message += " ";
                     message += localIPS[i];
                     message += ',';
                 }
                 
                 IPAddress send_to_address = IPAddress.Parse(destinationUser.IP);
-                IPEndPoint sending_end_point = new IPEndPoint(send_to_address, 1000);
+                IPEndPoint sending_end_point = new IPEndPoint(send_to_address, 12001);
 
                 byte[] data = Encoding.ASCII.GetBytes(message);
 
