@@ -11,14 +11,14 @@ namespace Server
         string username;
         string userIP;
         string friendUsername;
-        string ip;
+        string friendIP;
 
         public PendingRequest()
         {
             Username = "";
             UserIP = "";
             FriendUsername = "";
-            IP = "";
+            FriendIP = "";
         }
 
         public PendingRequest(string username, string userIP, string friendUsername, string ip)
@@ -26,7 +26,7 @@ namespace Server
             Username = username;
             UserIP = userIP;
             FriendUsername = friendUsername;
-            IP = ip;
+            FriendIP = ip;
         }
 
         public string UserIP
@@ -47,10 +47,10 @@ namespace Server
             set { friendUsername = value; }
         }
 
-        public string IP
+        public string FriendIP
         {
-            get { return ip; }
-            set { ip = value; }
+            get { return friendIP; }
+            set { friendIP = value; }
         }
     }
 }

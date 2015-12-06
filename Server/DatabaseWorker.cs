@@ -264,10 +264,10 @@ namespace Server
                         {
                             PendingRequest temp = new PendingRequest();
                             temp.Username = reader[0].ToString();
-                            temp.IP = reader[1].ToString();
+                            temp.UserIP = reader[1].ToString();
                             temp.FriendUsername = reader[2].ToString();
-                            temp.UserIP = reader[3].ToString();
-                            temp.UserIP = temp.UserIP.Trim('\\');
+                            temp.FriendIP = reader[3].ToString();
+                            temp.FriendIP = temp.FriendIP.Trim('\\');
                             values.Add(temp);
                         }
                         return values;

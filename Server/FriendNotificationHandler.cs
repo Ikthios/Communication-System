@@ -29,7 +29,7 @@ namespace Server
 
                 foreach (var request in sendTo)
                 {
-                    IPAddress sendAddress = IPAddress.Parse(request.IP);
+                    IPAddress sendAddress = IPAddress.Parse(request.FriendIP);
                     IPEndPoint sendEnpoint = new IPEndPoint(sendAddress, sendingPort);
 
                     string message = request.Username + " " + request.UserIP + ",";
