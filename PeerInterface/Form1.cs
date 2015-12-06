@@ -219,7 +219,7 @@ namespace PeerInterface
                 // "ACCEPT,my username, friend username
                 string accept = Txt_MyUsername.Text + "," + Txt_MyAddress.Text +
                     "," + Txt_FriendUsername.Text + "," + Txt_FriendAddress.Text;
-                string acceptRequest = "ACCEPT," + accept;
+                string acceptRequest = "ACCEPT," + accept + ',';
                 SendRequest(acceptRequest);
             }
             catch (Exception ex)
@@ -234,7 +234,7 @@ namespace PeerInterface
             {
                 // "REJECT,my username, my IP, friend username, friend IP
                 string reject = Txt_MyUsername.Text + "," + Txt_FriendUsername.Text;
-                string rejectRequest = "REJECT," + reject;
+                string rejectRequest = "REJECT," + reject + ',';
                 SendRequest(rejectRequest);
             }
             catch (Exception ex)
