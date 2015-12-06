@@ -203,7 +203,7 @@ namespace PeerInterface
                 //string friend = LstView_Peers.SelectedItems.ToString();
                 string friend = Txt_MyUsername.Text + "," + Txt_MyAddress.Text +
                     "," + Txt_FriendUsername.Text + "," + Txt_FriendAddress.Text;
-                string friendRequest = "ADD," + friend;
+                string friendRequest = "ADD," + friend + ',';
                 SendRequest(friendRequest);
             }
             catch (Exception ex)
