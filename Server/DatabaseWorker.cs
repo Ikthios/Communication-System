@@ -266,7 +266,8 @@ namespace Server
                             temp.Username = reader[0].ToString();
                             temp.IP = reader[1].ToString();
                             temp.FriendUsername = reader[2].ToString();
-                            temp.IP = reader[3].ToString();
+                            temp.UserIP = reader[3].ToString();
+                            temp.UserIP = temp.UserIP.Trim('\\');
                             values.Add(temp);
                         }
                         return values;
