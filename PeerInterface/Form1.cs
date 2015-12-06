@@ -322,14 +322,15 @@ namespace PeerInterface
                 if (tokens[0].Equals("SUCCESS"))
                 {
                     Btn_Connect.Enabled = false;
-                    requestListenerThread.Start();
-                    requestUpdateThread.Start();
-                    sendThread.Start();
                     Txt_SuccessAck.Text = tokens[0];
                     Txt_AccountInfo.Text = userInfo;
                     Txt_MyUsername.Text = username;
                     Txt_MyAddress.Text = GetIpAddress();
                     GetFriendList();
+                    Thread.Sleep(1000);
+                    requestListenerThread.Start();
+                    requestUpdateThread.Start();
+                    sendThread.Start();
                 }
                 else
                 {
