@@ -10,11 +10,17 @@ using NAudio.Wave;
 
 namespace PeerInterface
 {
+    /*
+    UDP listener that listens for friend requests on port 5000 and updates
+    the Lst_Requests list view. The Lst_Requests listview should clear before
+    updating with new requests (clear and fill).
+
+    The requests will come in as: USERNAME IP, USERNAME2, IP2...
+    */
     public partial class Form1 : Form
     {
         // Global variables
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         UdpClient peerReceiver;
         IPEndPoint hostEP, listenEP;
         // Create sender and listener threads
@@ -65,6 +71,7 @@ namespace PeerInterface
 
             // Set the delegate
             myDelegate = new AddListItem(AddListItemMethod);
+            requestDelegate = new AddRequestListItem(AddRequestMethod);
         }
 
         // Used for gathering peer information from the network
@@ -79,6 +86,18 @@ namespace PeerInterface
         }
         // End peer info gathering section
 
+        // Used for gathering friend requests from the server
+        private string requestString;
+        private void setRequestString(string item)
+        {
+            requestString = item;
+        }
+        private string getRequestString()
+        {
+            return requestString;
+        }
+        // End friend request gathering section
+
         // Used for storing the server IP address
         private string serverAddress;
         private void setServerAddress(string item)
@@ -92,11 +111,15 @@ namespace PeerInterface
         // End server IP storage section
         
         private delegate void AddListItem();
+        private delegate void AddRequestListItem();
         private AddListItem myDelegate;
+        private AddRequestListItem requestDelegate;
 
         private List<string> peerStringList = new List<string>();
+        private HashSet<string> requestHash1 = new HashSet<string>();
+        private HashSet<string> requestHash2;
 
-
+        Semaphore sem = new Semaphore(1, 1);
 
         /*
         This is the register feature of the peer interface. It will allow a user
@@ -105,13 +128,15 @@ namespace PeerInterface
         private void Btn_RegUser_Click(object sender, EventArgs e)
         {
             Thread registerThread = new Thread(new ThreadStart(Register));
-            registerThread.Start();
+            //registerThread.Start();
+            Register();
         }
 
         private void Register()
         {
+            Socket regSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPEndPoint regEP = new IPEndPoint(IPAddress.Parse(Txt_RegServAddr.Text), 7000);
-
+            string[] tokens;
             try
             {
                 string regMessage = (Txt_RegUsername.Text + ',' +
@@ -134,11 +159,32 @@ namespace PeerInterface
                 {
                     dataString += Convert.ToChar(buffer[i]);
                 }
-                Txt_SuccessAck.Text = dataString;
+                Debug.WriteLine("Reg: " + dataString);
+                //SUCCESS,username,password,name,email,address,phone,dob,ip
+                tokens = dataString.Split(',');
+                if (tokens[0].Equals("SUCCESS"))
+                {
+                    Txt_RegUsername.Text = "";
+                    Txt_RegsiterPassword.Text = "";
+                    Txt_RegName.Text = "";
+                    Txt_RegEmail.Text = "";
+                    Txt_RegHomeAddr.Text = "";
+                    Txt_RegPhoneNum.Text = "";
+                    Txt_RegDobYear.Text = "";
+                    Txt_RegDobMonth.Text = "";
+                    Txt_RegDobDay.Text = "";
+                    Txt_SuccessAck.Text = tokens[0];
+                    regSocket.Close();
+                }
+                else
+                {
+                    Txt_SuccessAck.Text = dataString;
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                regSocket.Close();
             }
         }
 
@@ -208,13 +254,21 @@ namespace PeerInterface
 
                 byte[] buffer = new byte[1500];
                 string dataString = "";
+
+                LstView_Friends.Items.Clear();
+                Txt_FriendUsername.Clear();
+                Txt_FriendAddress.Clear();
+
                 friendSocket.Receive(buffer);
+
                 for (int i = 0; i < buffer.Length; i++)
                 {
                     dataString += Convert.ToChar(buffer[i]);
                 }
+                
                 Txt_FriendSuccess.Text = dataString;
                 friendSocket.Close();
+                GetFriendList();
             }
             catch (Exception ex)
             {
@@ -232,87 +286,62 @@ namespace PeerInterface
         private bool loggedIn;
         private void Btn_Connect_Click(object sender, EventArgs e)
         {
-            Thread loginThread = new Thread(new ThreadStart(Login));
-            Thread friendThread = new Thread(new ThreadStart(GetFriendList));
-            //loginThread.Start();
+            string username = Txt_Username.Text;
+            string password = Txt_Password.Text;
+            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
+            string loginMessage = username + ',' + password + ',' + GetIpAddress() + ',';
+            Thread requestListenerThread = new Thread(new ThreadStart(RequestListener));
+            Thread requestUpdateThread = new Thread(new ThreadStart(RequestUpdater));
 
-            /*
-            while (true)
+            try
             {
-                if (loggedIn)
+                // Login and get user information
+                loginSocket.Connect(loginEP);
+                loginSocket.Send(Encoding.ASCII.GetBytes(loginMessage));
+
+                byte[] buffer = new byte[1500];
+                string dataString = "";
+                loginSocket.Receive(buffer);
+                for (int i = 0; i < buffer.Length; i++)
                 {
-                    friendThread.Start();
-                    break;
+                    dataString += Convert.ToChar(buffer[i]);
+                }
+                //SUCCESS,username,password,name,email,address,phone,dob,ip
+                Debug.WriteLine("Login: " + dataString);
+                string[] tokens = dataString.Split(',');
+                string[] dobTokens = tokens[7].Split(' ');
+                string userInfo = "Username: " + tokens[1] + "\r\n" +
+                                    "Password: " + tokens[2] + "\r\n" +
+                                    "Name: " + tokens[3] + "\r\n" +
+                                    "Email: " + tokens[4] + "\r\n" +
+                                    "Address: " + tokens[5] + "\r\n" +
+                                    "Phone Number: " + tokens[6] + "\r\n" +
+                                    "DOB: " + dobTokens[0] + "\r\n" +
+                                    "IP: " + tokens[8];
+                if (tokens[0].Equals("SUCCESS"))
+                {
+                    Btn_Connect.Enabled = false;
+                    requestListenerThread.Start();
+                    requestUpdateThread.Start();
+                    Txt_SuccessAck.Text = tokens[0];
+                    Txt_AccountInfo.Text = userInfo;
+                    Txt_MyUsername.Text = username;
+                    Txt_MyAddress.Text = GetIpAddress();
+                    GetFriendList();
                 }
                 else
                 {
-                    Debug.WriteLine("User not logged in yet.");
+                    Txt_SuccessAck.Text = tokens[0];
                 }
-            }
-            */
-            string username = Txt_Username.Text;
-            string password = Txt_Password.Text;
-            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
-            string loginMessage = username + ',' + password + ',' + GetIpAddress() + ',';
-
-            try
-            {
-                // Login and get user information
-                loginSocket.Connect(loginEP);
-                loginSocket.Send(Encoding.ASCII.GetBytes(loginMessage));
-
-                byte[] buffer = new byte[1500];
-                string dataString = "";
-                loginSocket.Receive(buffer);
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    dataString += Convert.ToChar(buffer[i]);
-                }
-                string[] tokens = dataString.Split(',');
-                if (tokens[0].Equals("SUCCESS"))
-                    Btn_Connect.Enabled = false;
-                Txt_AccountInfo.Text = dataString;
 
                 loggedIn = true;
+                loginSocket.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void Login()
-        {
-            string username = Txt_Username.Text;
-            string password = Txt_Password.Text;
-            Socket loginSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            IPEndPoint loginEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 6000);
-            string loginMessage = username + ',' + password + ',' + GetIpAddress() + ',';
-
-            try
-            {
-                // Login and get user information
-                loginSocket.Connect(loginEP);
-                loginSocket.Send(Encoding.ASCII.GetBytes(loginMessage));
-
-                byte[] buffer = new byte[1500];
-                string dataString = "";
-                loginSocket.Receive(buffer);
-                for (int i = 0; i < buffer.Length; i++)
-                {
-                    dataString += Convert.ToChar(buffer[i]);
-                }
-                string[] tokens = dataString.Split(',');
-                if (tokens[0].Equals("SUCCESS"))
-                    Btn_Connect.Enabled = false;
-                Txt_AccountInfo.Text = dataString;
-
-                loggedIn = true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
+                loginSocket.Close();
             }
         }
 
@@ -429,6 +458,35 @@ namespace PeerInterface
             }
         }
 
+        private void RequestListener()
+        {
+            UdpClient requestReceiver = new UdpClient();
+            IPEndPoint requestEP = new IPEndPoint(IPAddress.Any, 5000);
+            requestReceiver.Client.Bind(requestEP);
+            string incomingRequest;
+            byte[] dataBytes;
+
+            try
+            {
+                while (true)
+                {
+                    dataBytes = requestReceiver.Receive(ref requestEP);
+                    incomingRequest = Encoding.ASCII.GetString(dataBytes, 0, dataBytes.Length);
+                    Debug.WriteLine("Received request: " + incomingRequest);
+                    sem.WaitOne();
+                    requestHash1.Add(incomingRequest);
+                    sem.Release();
+                    //Invoke(requestDelegate);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                MessageBox.Show(ex.ToString());
+                requestReceiver.Close();
+            }
+        }
+
         // This will allow the UdpListener thread to access the main forms listview element
         private void AddListItemMethod()
         {
@@ -459,6 +517,37 @@ namespace PeerInterface
                 Debug.WriteLine(peerString + " already in peerStringList.");
             }
             */
+        }
+
+        private void AddRequestMethod()
+        {
+            LstView_Requests.Items.Clear();
+            foreach (string element in requestHash2)
+            {
+                LstView_Requests.Items.Add(element);
+            }
+            requestHash2.Clear();
+        }
+
+        private void RequestReceiver()
+        {
+            sem.WaitOne();
+            string requestString = getRequestString();
+            requestHash1.Add(requestString);
+            sem.Release();
+        }
+
+        private void RequestUpdater()
+        {
+            while (true)
+            {
+                Thread.Sleep(3000);
+                sem.WaitOne();
+                requestHash2 = new HashSet<string>(requestHash1);
+                requestHash1.Clear();
+                Invoke(requestDelegate);
+                sem.Release();
+            }
         }
 
         // Get peer IP address

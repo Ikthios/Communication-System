@@ -67,6 +67,8 @@
             this.Txt_RegsiterPassword = new System.Windows.Forms.TextBox();
             this.Txt_RegUsername = new System.Windows.Forms.TextBox();
             this.loginPage = new System.Windows.Forms.TabPage();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
             this.Txt_AccountInfo = new System.Windows.Forms.TextBox();
             this.Txt_LoginServAddress = new System.Windows.Forms.TextBox();
             this.Txt_Password = new System.Windows.Forms.TextBox();
@@ -75,6 +77,7 @@
             this.Txt_Address = new System.Windows.Forms.TextBox();
             this.commPage = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.Btn_GetFriendList = new System.Windows.Forms.Button();
             this.label21 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
@@ -101,7 +104,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.Btn_Exit = new System.Windows.Forms.Button();
             this.CmbBox_SampleRate = new System.Windows.Forms.ComboBox();
-            this.Btn_GetFriendList = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -383,10 +385,10 @@
             // 
             // Txt_SuccessAck
             // 
-            this.Txt_SuccessAck.Location = new System.Drawing.Point(250, 6);
+            this.Txt_SuccessAck.Location = new System.Drawing.Point(191, 6);
             this.Txt_SuccessAck.Name = "Txt_SuccessAck";
             this.Txt_SuccessAck.ReadOnly = true;
-            this.Txt_SuccessAck.Size = new System.Drawing.Size(100, 20);
+            this.Txt_SuccessAck.Size = new System.Drawing.Size(159, 20);
             this.Txt_SuccessAck.TabIndex = 13;
             // 
             // Btn_RegUser
@@ -494,6 +496,8 @@
             // 
             // loginPage
             // 
+            this.loginPage.Controls.Add(this.label23);
+            this.loginPage.Controls.Add(this.label22);
             this.loginPage.Controls.Add(this.Txt_AccountInfo);
             this.loginPage.Controls.Add(this.Txt_LoginServAddress);
             this.loginPage.Controls.Add(this.Txt_Password);
@@ -510,12 +514,31 @@
             this.loginPage.Text = "Login";
             this.loginPage.UseVisualStyleBackColor = true;
             // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(195, 245);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(70, 13);
+            this.label23.TabIndex = 9;
+            this.label23.Text = "User Address";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(195, 219);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(79, 13);
+            this.label22.TabIndex = 8;
+            this.label22.Text = "Server Address";
+            // 
             // Txt_AccountInfo
             // 
             this.Txt_AccountInfo.Location = new System.Drawing.Point(6, 107);
             this.Txt_AccountInfo.Multiline = true;
             this.Txt_AccountInfo.Name = "Txt_AccountInfo";
             this.Txt_AccountInfo.ReadOnly = true;
+            this.Txt_AccountInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.Txt_AccountInfo.Size = new System.Drawing.Size(265, 101);
             this.Txt_AccountInfo.TabIndex = 7;
             // 
@@ -601,6 +624,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Friends";
             // 
+            // Btn_GetFriendList
+            // 
+            this.Btn_GetFriendList.Location = new System.Drawing.Point(206, 42);
+            this.Btn_GetFriendList.Name = "Btn_GetFriendList";
+            this.Btn_GetFriendList.Size = new System.Drawing.Size(132, 23);
+            this.Btn_GetFriendList.TabIndex = 13;
+            this.Btn_GetFriendList.Text = "Get Friend List";
+            this.Btn_GetFriendList.UseVisualStyleBackColor = true;
+            this.Btn_GetFriendList.Click += new System.EventHandler(this.Btn_GetFriendList_Click);
+            // 
             // label21
             // 
             this.label21.AutoSize = true;
@@ -675,6 +708,7 @@
             // 
             this.Txt_MyUsername.Location = new System.Drawing.Point(6, 42);
             this.Txt_MyUsername.Name = "Txt_MyUsername";
+            this.Txt_MyUsername.ReadOnly = true;
             this.Txt_MyUsername.Size = new System.Drawing.Size(100, 20);
             this.Txt_MyUsername.TabIndex = 3;
             // 
@@ -682,6 +716,7 @@
             // 
             this.Txt_MyAddress.Location = new System.Drawing.Point(6, 16);
             this.Txt_MyAddress.Name = "Txt_MyAddress";
+            this.Txt_MyAddress.ReadOnly = true;
             this.Txt_MyAddress.Size = new System.Drawing.Size(100, 20);
             this.Txt_MyAddress.TabIndex = 2;
             // 
@@ -862,16 +897,6 @@
             this.CmbBox_SampleRate.Size = new System.Drawing.Size(128, 21);
             this.CmbBox_SampleRate.TabIndex = 22;
             // 
-            // Btn_GetFriendList
-            // 
-            this.Btn_GetFriendList.Location = new System.Drawing.Point(206, 42);
-            this.Btn_GetFriendList.Name = "Btn_GetFriendList";
-            this.Btn_GetFriendList.Size = new System.Drawing.Size(132, 23);
-            this.Btn_GetFriendList.TabIndex = 13;
-            this.Btn_GetFriendList.Text = "Get Friend List";
-            this.Btn_GetFriendList.UseVisualStyleBackColor = true;
-            this.Btn_GetFriendList.Click += new System.EventHandler(this.Btn_GetFriendList_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -975,6 +1000,8 @@
         private System.Windows.Forms.TextBox Txt_MyUsername;
         private System.Windows.Forms.TextBox Txt_MyAddress;
         private System.Windows.Forms.Button Btn_GetFriendList;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label22;
     }
 }
 
