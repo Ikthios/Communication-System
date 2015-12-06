@@ -66,7 +66,7 @@ namespace PeerInterface
             sendThread = new Thread(new ThreadStart(UdpSender));
             listenThread = new Thread(new ThreadStart(UdpListener));
             // Start sender and listener threads
-            sendThread.Start();
+            //sendThread.Start();
             listenThread.Start();
 
             // Set the delegate
@@ -324,6 +324,7 @@ namespace PeerInterface
                     Btn_Connect.Enabled = false;
                     requestListenerThread.Start();
                     requestUpdateThread.Start();
+                    sendThread.Start();
                     Txt_SuccessAck.Text = tokens[0];
                     Txt_AccountInfo.Text = userInfo;
                     Txt_MyUsername.Text = username;
@@ -396,8 +397,8 @@ namespace PeerInterface
         // This will broadcast the peer information to the network
         private void UdpSender()
         {
-            string username = Txt_Username.Text;
-            string message = "username," + GetIpAddress();
+            string username = Txt_MyUsername.Text;
+            string message = username + ',' + GetIpAddress();
             byte[] byteMessage = Encoding.ASCII.GetBytes(message);
             //hostEP = new IPEndPoint(IPAddress.Broadcast, 6500);
             hostEP = new IPEndPoint(IPAddress.Parse(Txt_LoginServAddress.Text), 12000);
@@ -519,6 +520,19 @@ namespace PeerInterface
             */
         }
 
+        private void RequestUpdater()
+        {
+            while (true)
+            {
+                Thread.Sleep(15000);
+                sem.WaitOne();
+                requestHash2 = new HashSet<string>(requestHash1);
+                requestHash1.Clear();
+                Invoke(requestDelegate);
+                sem.Release();
+            }
+        }
+
         private void AddRequestMethod()
         {
             LstView_Requests.Items.Clear();
@@ -527,27 +541,6 @@ namespace PeerInterface
                 LstView_Requests.Items.Add(element);
             }
             requestHash2.Clear();
-        }
-
-        private void RequestReceiver()
-        {
-            sem.WaitOne();
-            string requestString = getRequestString();
-            requestHash1.Add(requestString);
-            sem.Release();
-        }
-
-        private void RequestUpdater()
-        {
-            while (true)
-            {
-                Thread.Sleep(3000);
-                sem.WaitOne();
-                requestHash2 = new HashSet<string>(requestHash1);
-                requestHash1.Clear();
-                Invoke(requestDelegate);
-                sem.Release();
-            }
         }
 
         // Get peer IP address
