@@ -41,13 +41,5 @@ namespace TEST
                 waveProvider.AddSamples(buffer, 0, buffer.Length);
             }
         }
-
-        static void Main(string[] args)
-        {
-            ReceiveVoice mine = new ReceiveVoice();
-            mine.InitializeStream();
-            mine.startWavePrider();
-            mine.startListening();
-        }
     }
 }
