@@ -829,8 +829,10 @@
             // 
             this.CmbBox_BitDepth.FormattingEnabled = true;
             this.CmbBox_BitDepth.Items.AddRange(new object[] {
+            "8",
             "16",
-            "24"});
+            "24",
+            "32"});
             this.CmbBox_BitDepth.Location = new System.Drawing.Point(6, 46);
             this.CmbBox_BitDepth.Name = "CmbBox_BitDepth";
             this.CmbBox_BitDepth.Size = new System.Drawing.Size(128, 21);

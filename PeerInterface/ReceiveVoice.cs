@@ -17,6 +17,7 @@ namespace PeerInterface
         BufferedWaveProvider waveProvider = null;
         WaveInEvent sourceStream = null;
         WaveOut waveout = new WaveOut();
+        bool loop = true;
 
         public void InitializeStream()
         {
@@ -38,21 +39,20 @@ namespace PeerInterface
             InitializeStream();
             startWavePrider();
             udpListener.Client.Bind(listeningEP);
-            while (true)
+            while (loop)
             {
                 byte[] buffer = udpListener.Receive(ref listeningEP);
                 waveProvider.AddSamples(buffer, 0, buffer.Length);
             }
         }
 
-        /*
-        static void Main(string[] args)
+        public void DisconnectReceiver()
         {
-            ReceiveVoice mine = new ReceiveVoice();
-            Thread test = new Thread(mine.startListening);
-            test.Start();
+            udpListener.Close();
+            loop = false;
+            //waveout.Stop();
+            Thread.CurrentThread.Abort();
         }
-        */
     }
 }
 

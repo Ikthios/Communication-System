@@ -26,6 +26,17 @@ namespace PeerInterface
         // Create sender and listener threads
         Thread sendThread;
         Thread listenThread;
+        // Private Variables
+        private delegate void AddListItem();
+        private delegate void AddRequestListItem();
+        private AddListItem myDelegate;
+        private AddRequestListItem requestDelegate;
+
+        private List<string> peerStringList = new List<string>();
+        private HashSet<string> requestHash1 = new HashSet<string>();
+        private HashSet<string> requestHash2;
+
+        Semaphore sem = new Semaphore(1, 1);
 
         public Form1()
         {
@@ -37,15 +48,10 @@ namespace PeerInterface
             code for the voice communication section
             in the peer interface.
             */
-            // Disable stop button
-            Btn_Stop.Enabled = false;
-            Btn_Exit.Enabled = false;
-            CmbBox_BitDepth.Enabled = false;
-            CmbBox_SampleRate.Enabled = false;
-
             // Set default values on form load
             CmbBox_SampleRate.SelectedIndex = 7;
-            CmbBox_BitDepth.SelectedIndex = 0;
+            CmbBox_BitDepth.SelectedIndex = 1;
+            CmbBox_BitDepth.Enabled = false;
             Txt_ServAddress.Text = "127.0.0.1";
             Txt_ServPort.Text = "6700";
 
@@ -58,7 +64,7 @@ namespace PeerInterface
 
             // Show peer address to user
             Txt_Address.Text = GetIpAddress();
-            setServerAddress("10.134.172.46");
+            //setServerAddress("10.134.172.46");
             Txt_LoginServAddress.Text = getServerAddress();
 
             Thread.Sleep(3000);
@@ -109,17 +115,8 @@ namespace PeerInterface
             return serverAddress;
         }
         // End server IP storage section
-        
-        private delegate void AddListItem();
-        private delegate void AddRequestListItem();
-        private AddListItem myDelegate;
-        private AddRequestListItem requestDelegate;
 
-        private List<string> peerStringList = new List<string>();
-        private HashSet<string> requestHash1 = new HashSet<string>();
-        private HashSet<string> requestHash2;
 
-        Semaphore sem = new Semaphore(1, 1);
 
         /*
         This is the register feature of the peer interface. It will allow a user
@@ -200,7 +197,6 @@ namespace PeerInterface
             try
             {
                 // Need "ADD,my username, my IP, friend username, friend IP
-                //string friend = LstView_Peers.SelectedItems.ToString();
                 string friend = Txt_MyUsername.Text + "," + Txt_MyAddress.Text +
                     "," + Txt_FriendUsername.Text + "," + Txt_FriendAddress.Text;
                 string friendRequest = "ADD," + friend + ',';
@@ -283,7 +279,6 @@ namespace PeerInterface
         thread which will attempt to connect to the login server and retreive
         its' information.
         */
-        private bool loggedIn;
         private void Btn_Connect_Click(object sender, EventArgs e)
         {
             string username = Txt_Username.Text;
@@ -337,7 +332,6 @@ namespace PeerInterface
                     Txt_SuccessAck.Text = tokens[0];
                 }
 
-                loggedIn = true;
                 loginSocket.Close();
             }
             catch (Exception ex)
@@ -362,8 +356,6 @@ namespace PeerInterface
                 friendSocket.Connect(friendEP);
                 // Send username and get friend listing
                 friendSocket.Send(Encoding.ASCII.GetBytes(username));
-
-                //LstView_Friends.Clear();
 
                 // Get friend list back
                 byte[] friendBuffer = new byte[1500];
@@ -408,15 +400,6 @@ namespace PeerInterface
             // Loop the broadcast signal
             try
             {
-                /*
-                while (true)
-                {
-                    socket.Connect(hostEP);
-                    socket.Send(Encoding.ASCII.GetBytes(message));
-                    Debug.WriteLine("Send message: " + message);
-                    Thread.Sleep(5000);
-                }
-                */
                 while (true)
                 {
                     socket.Connect(hostEP);
@@ -500,25 +483,6 @@ namespace PeerInterface
             {
                 LstView_Peers.Items.Add(element);
             }
-            /*
-            foreach(string element in peerStringList)
-            {
-                if (element.Equals(peerString))
-                {
-                    count++;
-                }
-            }
-
-            if (count == 0)
-            {
-                peerStringList.Add(peerString);
-                LstView_Peers.Items.Add(peerString);
-            }
-            else
-            {
-                Debug.WriteLine(peerString + " already in peerStringList.");
-            }
-            */
         }
 
         private void RequestUpdater()
@@ -560,68 +524,21 @@ namespace PeerInterface
             return localIp;
         }
 
+
+
         /*
-        Below here resides the audio code
-        for communicating with other peers
-        over the network. The code in this
-        section will eventually be moved
-        over to the 'voice.cs' class after
-        the feature has been confirmed to
+        Below here resides the audio code for communicating with other peers
+        over the network. The code in this section will eventually be moved
+        over to the 'voice.cs' class after the feature has been confirmed to
         work nicely.
         */
-        Voice voice = new Voice();
 
         private void Btn_Start_Click(object sender, EventArgs e)
         {
-            /*
-            // Return if no items are selected
-            if (LstView_Devices.SelectedItems.Count == 0)
-            {
-                MessageBox.Show("A input device must be selected.");
-            }
-            else
-            {
-                // Disable the start button and enable the stop button
-                Btn_Start.Enabled = false;
-                Btn_Stop.Enabled = true;
-
-                string peerAddress = Txt_ServAddress.Text;
-                int bitRate = int.Parse(CmbBox_SampleRate.Text);
-                int bitDepth = int.Parse(CmbBox_BitDepth.Text);
-                int deviceID = int.Parse(Cmb_InputDevices.Text);
-
-                voice.Start(peerAddress, deviceID, bitRate, bitDepth);
-            }*/
-            // Disable the start button and enable the stop button
             Btn_Start.Enabled = false;
-            //Btn_Stop.Enabled = true;
+            Btn_Stop.Enabled = true;
 
             string peerAddress = Txt_ServAddress.Text;
-            int bitRate = int.Parse(CmbBox_SampleRate.Text);
-            int bitDepth = int.Parse(CmbBox_BitDepth.Text);
-            int deviceID = Cmb_InputDevices.SelectedIndex;
-
-            SendOutVoice sov = new SendOutVoice(peerAddress);
-            Thread senderThread = new Thread(new ThreadStart(sov.StartSending));
-            senderThread.Start();
-        }
-
-        private void Btn_Stop_Click_1(object sender, EventArgs e)
-        {
-            Btn_Stop.Enabled = false;
-            Btn_Start.Enabled = true;
-
-            voice.Stop();
-        }
-
-        private void Btn_Exit_Click(object sender, EventArgs e)
-        {
-            Btn_Stop_Click_1(sender, e);
-            this.Close();
-        }
-
-        private void Btn_StartAudioList_Click(object sender, EventArgs e)
-        {
             int bitRate = int.Parse(CmbBox_SampleRate.Text);
             int bitDepth = int.Parse(CmbBox_BitDepth.Text);
             int deviceID = Cmb_InputDevices.SelectedIndex;
@@ -632,8 +549,48 @@ namespace PeerInterface
 
             Btn_StartAudioList.Text = "Listening";
             Btn_StartAudioList.BackColor = System.Drawing.Color.Green;
+
+            Thread.Sleep(1000);
+
+            SendOutVoice sov = new SendOutVoice(peerAddress, deviceID, bitRate, bitDepth);
+            Thread senderThread = new Thread(new ThreadStart(sov.StartSending));
+            senderThread.Start();
         }
 
+        private void Btn_Stop_Click_1(object sender, EventArgs e)
+        {
+            Btn_Stop.Enabled = false;
+            Btn_Start.Enabled = true;
+
+            /*
+            ReceiveVoice rv = new ReceiveVoice();
+            SendOutVoice sov = new SendOutVoice();
+
+            try
+            {
+                sov.DisconnectSender();
+                rv.DisconnectReceiver();
+
+                Btn_StartAudioList.Text = "Stopped";
+                Btn_StartAudioList.BackColor = System.Drawing.Color.Red;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            */
+        }
+
+        private void Btn_Exit_Click(object sender, EventArgs e)
+        {
+            Btn_Stop_Click_1(sender, e);
+            this.Close();
+        }
+
+        private void Btn_StartAudioList_Click(object sender, EventArgs e)
+        {
+            // Code moved to call peer feature which now starts the audio listener before sending audio data.
+        }
         
         private void GetInputDevicesList()
         {

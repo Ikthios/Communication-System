@@ -13,21 +13,24 @@ namespace PeerInterface
 {
     class SendOutVoice
     {
-        int deviceID = 0;
-        int bitRate = 44100;
-        int bitDepth = 16;
-
+        int deviceID;
+        int bitRate;
+        int bitDepth;
         string destinationIP;
+        bool loop = true;
 
         IPEndPoint outEP;
-
         WaveInEvent incoming = new WaveInEvent();
-
         UdpClient sender = new UdpClient();
 
-        public SendOutVoice(string destinationIP)
+        public SendOutVoice() { }
+
+        public SendOutVoice(string destinationIP, int deviceID, int bitRate, int bitDepth)
         {
             this.destinationIP = destinationIP;
+            this.deviceID = deviceID;
+            this.bitRate = bitRate;
+            this.bitDepth = bitDepth;
             outEP = new IPEndPoint(IPAddress.Parse(destinationIP), 6700);
         }
 
@@ -44,7 +47,7 @@ namespace PeerInterface
             sender.Connect(outEP);
             incoming.DataAvailable += sourcestream_DataAvailable;
             incoming.StartRecording();
-            while (true)
+            while (loop)
             {
 
             }
@@ -63,15 +66,13 @@ namespace PeerInterface
             }
         }
 
-        /*
-        static void Main(string[] args)
+        public void DisconnectSender()
         {
-            
-            SendOutVoice mine = new SendOutVoice("10.134.172.46");
-            Thread test = new Thread(mine.StartSending);
-            test.Start();
+            sender.Close();
+            loop = false;
+            //incoming.StopRecording();
+            Thread.CurrentThread.Abort();
         }
-        */
     }
 }
 
